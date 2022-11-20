@@ -96,4 +96,16 @@ public interface Creature {
      * @param damage number of points to increase
      */
     void improveDamage(float damage);
+
+    void increaseStrength(int bonusStrength);
+
+    void decreaseStrength(int bonusStrength);
+
+    void increaseAgility(int bonusAgility);
+
+    void decreaseAgility(int bonusAgility);
+
+    void increaseDexterity(int bonusDexterity);
+
+    void decreaseDexterity(int bonusDexterity);
 }
