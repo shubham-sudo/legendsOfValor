@@ -7,20 +7,21 @@ import creature.Creature;
  * Koulou space where the strength of creatures increases
  */
 public class KoulouSpace extends SpecialSpace{
-    private final int bonusStrength = 100;  // TODO: fetch this strength from config files
+    private final int BONUS_STRENGTH = 100;  // TODO: fetch this strength from config files
+    private final String ANSI_BLUE = "\u001B[34m";  // TODO: fetch this from config files
 
     @Override
-    public boolean isSafeToOccupy(Creature creature) {
-        return this.creature == null || !this.creature.equals(creature);
+    public String bgColor() {
+        return ANSI_BLUE;
     }
 
     @Override
-    protected void addBonus() {
-        this.creature.increaseStrength(bonusStrength);
+    protected void addBonus(Creature creature) {
+        creature.increaseStrength(BONUS_STRENGTH);
     }
 
     @Override
-    protected void removeBonus() {
-        this.creature.decreaseStrength(bonusStrength);
+    protected void removeBonus(Creature creature) {
+        creature.decreaseStrength(BONUS_STRENGTH);
     }
 }

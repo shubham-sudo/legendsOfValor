@@ -108,4 +108,8 @@ public interface Creature {
     void increaseDexterity(int bonusDexterity);
 
     void decreaseDexterity(int bonusDexterity);
+
+    String displayValue();
+
+    boolean typeEquals(Creature creature);
 }

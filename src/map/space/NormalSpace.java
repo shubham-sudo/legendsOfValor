@@ -1,6 +1,8 @@
 package map.space;
 
 import creature.Creature;
+import creature.Hero;
+import creature.Monster;
 
 
 /**
@@ -10,24 +12,67 @@ import creature.Creature;
  * @see PlainSpace
  */
 public abstract class NormalSpace implements Space{
-    protected Creature creature = null;
+    protected Creature hero = null;
+    protected Creature monster = null;
+
+    private boolean isSafeForMonster(Creature creature){
+        if (!(creature instanceof Monster)){
+            return true;
+        }
+        return this.monster == null || !this.monster.typeEquals(creature);
+    }
+
+    private boolean isSafeForHero(Creature creature){
+        if (!(creature instanceof Hero)){
+            return true;
+        }
+        return this.hero == null || !this.hero.typeEquals(creature);
+    }
 
     @Override
-    public abstract boolean isSafeToOccupy(Creature creature);
+    public boolean isSafeToOccupy(Creature creature) {
+        return isSafeForMonster(creature) && isSafeForHero(creature);
+    }
+
+    private void creatureEnter(Creature creature){
+        if (creature instanceof Monster){
+            this.monster = creature;
+        } else {
+            this.hero = creature;
+        }
+    }
+
+    private void creatureExit(Creature creature){
+        if (creature instanceof Monster){
+            this.monster = null;
+        } else {
+            this.hero = null;
+        }
+    }
+
+    /**
+     * Display creature on space or empty String
+     * @see Space
+     * @return String
+     */
+    @Override
+    public String displayValue() {
+        return Space.getValue(this.hero, this.monster);
+    }
 
     @Override
     public void occupy(Creature creature) throws IllegalAccessException {
         if (isSafeToOccupy(creature)){
-            this.creature = creature;
+            this.creatureEnter(creature);
         } else {
             throw new IllegalAccessException("Invalid Access!!!");
         }
     }
 
     @Override
-    public void vacant() {
-        if (this.creature != null) {
-            this.creature = null;
+    public void vacant(Creature creature) {
+        if (this.hero.equals(creature) || this.monster.equals(creature)){
+            this.creatureExit(creature);
         }
     }
 }
