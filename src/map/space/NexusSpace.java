@@ -7,7 +7,7 @@ import creature.Creature;
  * Nexus space which is a home for Creature
  */
 public class NexusSpace extends NormalSpace{
-    private final String ANSI_RED = "\u001B[31m";  // TODO: fetch this from config files
+    private static final String ANSI_RED_BACKGROUND = "\u001B[41m";
 
     @Override
     public boolean isSafeToOccupy(Creature creature) {
@@ -16,14 +16,12 @@ public class NexusSpace extends NormalSpace{
 
     @Override
     public String bgColor() {
-        return ANSI_RED;
+        return ANSI_RED_BACKGROUND;
     }
 
     @Override
     public void occupy(Creature creature) throws IllegalAccessException {
         super.occupy(creature);
-        // TODO:(shubham) create market and show options to creature ..
-        //  put a check for hero, although monster is managed by computer so it will never ask for market
-        //  also need a nexus controller to get input from user and also generate the monster after few rounds
+        // TODO:(shubham) end the game if creature is a Hero
     }
 }

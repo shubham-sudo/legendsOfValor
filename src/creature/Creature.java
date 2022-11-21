@@ -97,17 +97,17 @@ public interface Creature {
      */
     void improveDamage(float damage);
 
-    void increaseStrength(int bonusStrength);
+    void increaseStrength(double bonusStrength);
 
-    void decreaseStrength(int bonusStrength);
+    void decreaseStrength(double bonusStrength);
 
-    void increaseAgility(int bonusAgility);
+    void increaseAgility(double bonusAgility);
 
-    void decreaseAgility(int bonusAgility);
+    void decreaseAgility(double bonusAgility);
 
-    void increaseDexterity(int bonusDexterity);
+    void increaseDexterity(double bonusDexterity);
 
-    void decreaseDexterity(int bonusDexterity);
+    void decreaseDexterity(double bonusDexterity);
 
     String displayValue();
 

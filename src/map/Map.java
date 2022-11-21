@@ -1,80 +1,76 @@
 package map;
 
-import space.Space;
+import creature.*;
+import map.lane.*;
+import map.space.*;
 
-/**
- * Map of the game where player can move on different tiles
- */
+import java.util.NoSuchElementException;
+
+
 public class Map {
-    public static final int MIN_SIZE = 8;
-    public static final int MAX_SIZE = 12;
-    private final int size;
-    private final Tile[][] tiles;
+    private static final int DEFAULT_LANES = 3;
+    private static final int MAX_LANES = 6;
+    private final int numberOfLanes;
+    private final int laneSize;
+    private final Lane[] lanes;
 
-    /**
-     * creates a new map for the game
-     * @param size given size of map
-     */
-    public Map(int size){
-        if (size < 4 || size > 12){
-            throw new IllegalArgumentException("ERROR: Size should be between 4 & 12");
-        }
-        this.size = size;
-        this.tiles = new Tile[this.size][this.size];
+    public Map(int numberOfLanes, int laneSize){
+        this.numberOfLanes = numberOfLanes;
+        this.lanes = new Lane[numberOfLanes];
+        this.laneSize = laneSize;
     }
 
-    /**
-     * creates a map with default size
-     */
     public Map(){
-        this(MIN_SIZE);
+        this(DEFAULT_LANES, Lane.DEFAULT_LENGTH);
     }
 
-    /**
-     * getter for the size of map
-     * @return integer
-     */
-    public int getSize() {
-        return size;
+    public int getNumberOfLanes() {
+        return (2 * numberOfLanes) - 1;
     }
 
-    /**
-     * setter for the tile of the map
-     * @param i x coordinate
-     * @param j y coordinate
-     * @param space space to place on map
-     */
-    public void setTile(int i, int j, Space space){
-        this.tiles[i][j] = new Tile(space);
+    public int getLaneSize() {
+        return laneSize;
     }
 
-    /**
-     * get total number of tiles on map
-     * @return total size of map
-     */
-    public int getTotalTiles() {
-        return size * size;
-    }
-
-    /**
-     * get all tiles as an array
-     * @return array of tiles
-     */
-    public Tile[][] getTiles() {
-        return tiles;
-    }
-
-    /**
-     * get a specific tile of the map
-     * @param row x coordinate
-     * @param col y coordinate
-     * @return tile object
-     * @throws IllegalAccessException
-     */
-    public Tile getTile(int row, int col) throws IllegalAccessException{
-        if (row < 0 || row >= this.getSize() || col < 0 || col >= this.getSize()){
-            throw new IllegalAccessException();
+    public void initialize(){
+        for (int i = 0; i < numberOfLanes; i++){
+            lanes[i] = new PassableLane(laneSize);
+            lanes[i].initializeLane();
         }
-        return this.tiles[row][col];
+    }
+
+    public Lane getLane(int index) throws NoSuchElementException {
+        if (index < 0 || index >= this.numberOfLanes){
+            throw new NoSuchElementException("Invalid Lane!!!");
+        }
+        return lanes[index];
+    }
+
+    public Space getSpace(int laneIndex, int spaceRow, int spaceCol) throws NoSuchElementException{
+        return getLane(laneIndex).getSpace(spaceRow, spaceCol);
+    }
+
+    public void occupySpace(int laneIndex, int spaceRow, int spaceCol, Creature creature) throws IllegalAccessException {
+        Space space = getSpace(laneIndex, spaceRow, spaceCol);
+        if (space.isSafeToOccupy(creature)){
+            space.occupy(creature);
+        } else {
+            throw new IllegalAccessException("Invalid Access!!!");
+        }
+    }
+
+    public Lane[] getMap(){
+        Lane[] displayLanes = new Lane[(2 * numberOfLanes) - 1];
+        int i = 0;
+        int k = 0;
+        while (i < (2 * (numberOfLanes-1))){
+            displayLanes[i] = lanes[k];
+            displayLanes[i+1] = new ImpassibleLane(laneSize);
+            displayLanes[i+1].initializeLane();
+            i += 2;
+            k += 1;
+        }
+        displayLanes[i] = lanes[k];
+        return displayLanes;
     }
 }

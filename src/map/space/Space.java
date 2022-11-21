@@ -12,7 +12,9 @@ public interface Space {
     String CREATURE_CHARACTER_SPACE = "  ";
 
     boolean isSafeToOccupy(Creature creature);
+
     void occupy(Creature creature) throws IllegalAccessException;
+
     void vacant(Creature creature);
 
     /**

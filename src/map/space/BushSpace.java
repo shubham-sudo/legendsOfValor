@@ -7,12 +7,12 @@ import creature.Creature;
  * Bush space where the dexterity of creatures increases
  */
 public class BushSpace extends SpecialSpace{
-    private final int BONUS_DEXTERITY = 100;  // TODO: fetch this strength from config files
-    private final String ANSI_GREEN = "\u001B[32m";  // TODO: fetch this from config files
+    private final double BONUS_DEXTERITY = 0.10;  // TODO: fetch this strength from config files
+    private static final String ANSI_GREEN_BACKGROUND = "\u001B[42m";  // TODO: fetch this from config files
 
     @Override
     public String bgColor() {
-        return ANSI_GREEN;
+        return ANSI_GREEN_BACKGROUND;
     }
 
     @Override

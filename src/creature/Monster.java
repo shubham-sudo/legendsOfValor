@@ -258,4 +258,44 @@ public class Monster extends AbstractCreature {
     public void improveDamage(float damage) {
         this.damage += damage;
     }
+
+    @Override
+    public void increaseStrength(double bonusStrength) {
+
+    }
+
+    @Override
+    public void decreaseStrength(double bonusStrength) {
+
+    }
+
+    @Override
+    public void increaseAgility(double bonusAgility) {
+
+    }
+
+    @Override
+    public void decreaseAgility(double bonusAgility) {
+
+    }
+
+    @Override
+    public void increaseDexterity(double bonusDexterity) {
+
+    }
+
+    @Override
+    public void decreaseDexterity(double bonusDexterity) {
+
+    }
+
+    @Override
+    public String displayValue() {
+        return null;
+    }
+
+    @Override
+    public boolean typeEquals(Creature creature) {
+        return false;
+    }
 }

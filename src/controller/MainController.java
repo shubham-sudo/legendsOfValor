@@ -39,7 +39,7 @@ public class MainController {
                 continue;
             }
             if (num == 1) {  // Can use switch case if multiple games
-                this.gameController = new LegendsGameController();
+                this.gameController = new LegendsOfValorController();
                 break;
             } else {
                 System.out.println("Invalid Input, Try again!");
