@@ -24,7 +24,7 @@ public class LegendsOfValorController implements GameController {
             for (int j = 0; j < map.getNumberOfLanes(); j++){
                 Lane lane = lanes[j];
                 for (int k = 0; k < lane.getWidth(); k++){
-                    Space space = lane.getSpace(i, k);
+                    Space space = lane.getSpace(i, k);  // TODO: (shubham) think if we can have border for every space
                     System.out.print(space.bgColor() + space.displayValue() + Space.ANSI_RESET);
                 }
             }

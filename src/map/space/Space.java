@@ -8,7 +8,7 @@ import creature.Creature;
  */
 public interface Space {
     String ANSI_RESET = "\u001B[0m";
-    String EMPTY_SPACE = "   ";  // TODO: Add something on special space to recognize.
+    String EMPTY_SPACE = "     ";  // TODO: Add something on special space to recognize.
     String CREATURE_CHARACTER_SPACE = "  ";
 
     boolean isSafeToOccupy(Creature creature);
