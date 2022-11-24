@@ -4,63 +4,30 @@ package creature;
  * Warriors is a type of hero with more strength and dexterity
  */
 public class Warriors extends Hero{
+    private final double LEVEL_UP_FACTOR = 0.05;    // TODO: (shubham) pick this up from config files
 
     /**
      * Creates a new sorcerers
-     * @param name name of the hero
-     * @param health starting health
-     * @param gold starting gold
+     *
+     * @param name       name of the creature
+     * @param health     starting health of the creature
+     * @param baseMana   starting mana of the creature
+     * @param strength   strength to damage for creature
+     * @param agility    agility to dodge for creature
+     * @param hands      number of hands for creature
+     * @param dexterity  dexterity to cast spell
+     * @param experience starting experience for creature
      */
-    public Warriors(String name, int health, float gold) {
-        super(name, health, gold);
+    public Warriors(String name, double health, double baseMana, double strength, double agility, int hands, double dexterity, double experience) {
+        super(name, health, baseMana, strength, agility, hands, dexterity, experience);
     }
 
     /**
-     * @see AbstractCreature#levelUpFavouredSkills()
+     * Level up favoured skills of paladins on level up
      */
     @Override
     public void levelUpFavouredSkills() {
-        this.setStrength((int)(this.getStrength() + this.getStrength() * 0.05));
-        this.setDexterity((int)(this.getDexterity() + this.getDexterity() * 0.05));
-    }
-
-    @Override
-    public void increaseStrength(double bonusStrength) {
-
-    }
-
-    @Override
-    public void decreaseStrength(double bonusStrength) {
-
-    }
-
-    @Override
-    public void increaseAgility(double bonusAgility) {
-
-    }
-
-    @Override
-    public void decreaseAgility(double bonusAgility) {
-
-    }
-
-    @Override
-    public void increaseDexterity(double bonusDexterity) {
-
-    }
-
-    @Override
-    public void decreaseDexterity(double bonusDexterity) {
-
-    }
-
-    @Override
-    public String displayValue() {
-        return null;
-    }
-
-    @Override
-    public boolean typeEquals(Creature creature) {
-        return false;
+        increaseStrength(strength + (strength * LEVEL_UP_FACTOR));
+        increaseDexterity(dexterity + (dexterity * LEVEL_UP_FACTOR));
     }
 }

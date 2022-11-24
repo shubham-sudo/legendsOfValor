@@ -1,59 +1,47 @@
 package creature;
 
 
-import battle.CreatureBattleMove;
-
 /**
  * Abstract class for all type of creatures with also implements Creature interface for basic operations
  */
 public abstract class AbstractCreature implements Creature {
     protected final String name;
     protected int level;
-    protected int health;
-    protected int currentHealth;
+    protected double baseHealth;
+    protected double strength;
+    protected double agility;
     private boolean alive;
 
     /**
      * Creates and object of AbstractCreature class
      * @param name name of the creature
-     * @param health starting health of the creature
+     * @param baseHealth starting health of the creature
      */
-    public AbstractCreature(String name, int health){
+    public AbstractCreature(String name, double baseHealth, double strength, double agility){
         this.name = name;
         this.alive = true;
         this.level = 1;
-        this.health = health;
-        this.currentHealth = health;
+        this.baseHealth = baseHealth;
+        this.strength = strength;
+        this.agility = agility;
     }
 
-    /**
-     * getter for alive
-     * @return boolean
-     */
-    public boolean isAlive(){
-        return this.alive;
+    @Override
+    public void decreaseAgility(double agility) {
+        this.agility = (this.agility - agility) < 0 ? 0 : (this.agility - agility);
     }
 
-    /**
-     * if health of creature is 0 call setDead
-     */
-    public void setDead(){
-        this.alive = false;
+    @Override
+    public void decreaseDexterity(double dexterity){}
+
+    @Override
+    public void decreaseHealth(double health) {
+        this.baseHealth = Math.max((this.baseHealth - health), 0);
     }
 
-    /**
-     * to make creature alive again
-     */
-    public void energize(){
-        this.alive = true;
-    }
-
-    /**
-     * getter for name
-     * @return String
-     */
-    public String getName() {
-        return name;
+    @Override
+    public void decreaseStrength(double strength) {
+        this.strength = (this.strength - strength) < 0 ? 0 : (this.strength - strength);
     }
 
     /**
@@ -65,79 +53,55 @@ public abstract class AbstractCreature implements Creature {
     }
 
     /**
-     * setting or updating the health
-     * @param hp integer
+     * getter for name
+     * @return String
      */
-    public void setHp(int hp) {
-        this.health = hp * this.level;
+    public String getName() {
+        return name;
     }
 
-    /**
-     * setter for level
-     * @param level integer
-     */
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    /**
-     * setter for current health
-     * @param currentHp integer
-     */
-    public void setCurrentHp(int currentHp) {
-        this.currentHealth = currentHp;
-    }
-
-    /**
-     * return information in table format to print on console
-     * @return String[]
-     */
-    public abstract String[] seekInformation();
-
-    /**
-     * get the impact of attack from this creature
-     * @param creatureBattleMove based on the ATTACK OR CAST
-     * @return integer
-     */
-    public abstract int getAttackImpact(CreatureBattleMove creatureBattleMove);
-
-    /**
-     * Update the impact of attack from opponent to the health of this creature
-     * @param damage integer
-     */
-    public abstract void updateAttackImpact(int damage);
-
-    /**
-     * Level up favoured skills more while leveling up creature
-     */
-    public abstract void levelUpFavouredSkills();
-
-    /**
-     * level up creature with this
-     */
-    public void levelUp(){
-        this.level++;
-        this.health += this.level * 100;
-        this.levelUpFavouredSkills();
-    }
-
-    /**
-     * Regain is to regain some exp and health at end of every battle
-     */
-    public abstract void regain();
-
-    /**
-     * Equals method for comparison of same type objects
-     * @param o other object
-     * @return boolean true if same
-     */
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof AbstractCreature)){
-            return false;
-        }
-        AbstractCreature other = (AbstractCreature) o;
-        return other.name.equals(this.name);
+    public void increaseAgility(double agility) {
+        this.agility += agility;
     }
 
+    @Override
+    public void increaseDexterity(double dexterity){}
+
+    @Override
+    public void increaseHealth(double health) {
+        this.baseHealth += health;
+    }
+
+    @Override
+    public void increaseStrength(double strength) {
+        this.strength += strength;
+    }
+
+    /**
+     * getter for alive
+     * @return boolean
+     */
+    public boolean isAlive(){
+        return this.alive;
+    }
+
+    protected void levelUp(){
+        this.level++;
+        this.baseHealth += this.level * 100;
+    }
+
+    /**
+     * Revive creature
+     */
+    protected void revive(){
+        this.alive = true;
+    }
+
+    /**
+     * set creature dead
+     */
+    public void setDead(){
+        this.alive = false;
+    }
 }

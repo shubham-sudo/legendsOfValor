@@ -1,9 +1,7 @@
 package creature;
 
-import battle.*;
 import inventory.*;
 import product.*;
-import utility.Utility;
 import wallet.Wallet;
 
 import java.util.*;
@@ -12,441 +10,240 @@ import java.util.*;
  * Abstract base class for all type of heroes
  */
 public abstract class Hero extends AbstractCreature {
-    private int freeHands = 2;
-    private int busyHands = 0;
-    private int mana;
-    private int currentMana;
-    private int strength;
-    private int dexterity;
-    private int experience;
-    private int agility;
-    private final Inventory inventory;
+    private static int ID = 0;  // TODO: (shubham) think if we can place a icon, instead of 'H'
+    private final int id;
+    private final double baseMana;
     private final Wallet wallet;
-    private Armor currentArmor;
-    private final ArrayList<Weapon> currentWeapons;
-
-    public static final String[] header = new String[]{
-            "HERO Name",
-            "HP",
-            "MP",
-            "IS ALIVE",
-            "STRENGTH",
-            "EXPERIENCE",
-            "DEXTERITY",
-            "AGILITY",
-            "In-Hand WEAPON(s)",
-            "In-Hand ARMOR",
-            "GOLD"
-    };
+    private final Inventory inventory;
+    private final ArrayList<Weapon> inHandWeapons;
+    protected double dexterity;
+    private int hands;
+    private double health;
+    private double mana;
+    private double defence;
+    private double experience;
+    private Armor armor;
 
     /**
-     * Creates a new hero using below params
-     * @param name name of hero
-     * @param health starting health
-     * @param gold starting gold in wallet
+     * Creates and object of AbstractCreature class
+     *
+     * @param name   name of the creature
+     * @param health starting health of the creature
      */
-    public Hero(String name, int health, float gold) {
-        super(name, health);
-        currentWeapons = new ArrayList<>();
+    public Hero(String name, double health, double baseMana, double strength, double agility, int hands, double dexterity, double experience) {
+        super(name, health, strength, agility);
+        this.id = ++ID;
+        this.hands = hands;
+        this.health = health;
+        this.mana = baseMana;
+        this.baseMana = baseMana;
+        this.defence = strength * 0.25;
+        this.dexterity = dexterity;
+        this.experience = experience;
+        this.wallet = new Wallet();
         this.inventory = new CreatureInventory();
-        this.wallet = new Wallet(gold);
+        this.inHandWeapons = new ArrayList<>();
     }
 
-    /**
-     * @see Creature#getMana()
-     */
     @Override
-    public float getMana(){
-        return this.currentMana;
+    public void decreaseDamage(double damage) {
+        decreaseStrength(damage);
     }
 
-    /**
-     * @see Creature#isArmorOn()
-     */
     @Override
-    public boolean isArmorOn(){
-        return currentArmor == null;
+    public void decreaseDefence(double defence) {
+        this.defence = (this.defence - defence) < 0 ? 0 : (this.defence - defence);
+    }
+
+    @Override
+    public void decreaseDexterity(double dexterity){
+        this.dexterity -= Math.max((this.dexterity - dexterity), 0);
+    }
+
+    @Override
+    public void decreaseHealth(double health) {
+        this.health = Math.max((this.health - health), 0);
+    }
+
+    @Override
+    public String displayValue() {
+        return "H"+id;
     }
 
     /**
-     * @see Creature#setArmorOn(Armor)
+     * Remove armor may be you want to replace with another
+     */
+    public void dropArmor(Armor armor){
+        if (this.armor == armor){
+            this.armor = null;
+        }
+    }
+
+    /**
+     * drop weapon may be you want to replace
+     * @param weapon product
+     */
+    public void dropWeapon(Weapon weapon){
+        if (inHandWeapons.contains(weapon)){
+            inHandWeapons.remove(weapon);
+            this.hands += weapon.getRequiredHands();
+        }
+    }
+
+    /**
+     * Put on some armor
      * @param armor Product
      */
-    @Override
-    public void setArmorOn(Armor armor){
-        this.inventory.removeProduct(currentArmor);
-        this.currentArmor = armor;
+    public void equipArmor(Armor armor){
+        this.armor = armor;
     }
 
     /**
-     * @see Creature#removeArmor()
+     * equip weapon if you have some free hands
+     * @param weapon product
      */
-    @Override
-    public void removeArmor(){
-        if (this.currentArmor != null){
-            this.inventory.addProduct(this.currentArmor);
+    public void equipWeapon(Weapon weapon) throws IllegalAccessException{
+        if (this.getFreeHands() > weapon.getRequiredHands()){
+            inHandWeapons.add(weapon);
+            this.hands -= weapon.getRequiredHands();
         }
-        this.currentArmor = null;
+        throw new IllegalAccessException("No Free Hands!");
     }
 
     /**
-     * @see Creature#getFreeHands()
+     * Gain experience on monster kill and
+     * levelUp if experience reached to current_level * 10
+     *
+     * @param exp experience to add
+     */
+    public void gainExperience(double exp){
+        this.experience += exp;
+        if (this.experience >= this.level * 10){
+            levelUp();
+        }
+    }
+
+    /**
+     * Gain some gold after every monster kill
+     * @param gold double value
+     */
+    public void gainGold(double gold){
+        this.wallet.credit(gold);
+    }
+
+    public Armor getArmor(){
+        return this.armor;
+    }
+
+    /**
+     * Getter for getting number of free hands
      * @return integer
      */
-    @Override
     public int getFreeHands(){
-        return this.freeHands;
+        return this.hands;
+    }
+
+    public Inventory getHeroesInventory(){
+        return this.inventory;
+    }
+
+    public double getMana() {
+        return mana;
+    }
+
+    public Wallet getWallet(){
+        return this.wallet;
     }
 
     /**
-     * @see Creature#getBusyHands()
-     * @return integer
+     * heal the skill of the creature using potion
+     * @param potion potion is product used for healing
      */
-    @Override
-    public int getBusyHands(){
-        return this.busyHands;
-    }
-
-    /**
-     * @see Creature#reduceMana(float)
-     * @param mana mana to reduce
-     */
-    @Override
-    public void reduceMana(float mana){
-        this.currentMana -= mana;
-    }
-
-    /**
-     * @see Creature#reduceDamage(float)
-     * @param damage number of damage to reduce
-     */
-    @Override
-    public void reduceDamage(float damage){
-        this.strength -= damage;
-    }
-
-    /**
-     * @see Creature#reduceDefence(float)
-     * @param defence number
-     */
-    @Override
-    public void reduceDefence(float defence){
-        this.health -= defence;
-    }
-
-    /**
-     * @see Creature#reduceAgility(float)
-     * @param agility float number
-     */
-    @Override
-    public void reduceAgility(float agility){
-        this.agility -= agility;
-    }
-
-    /**
-     * @see Creature#improveDefence(float)
-     * @param defence float number
-     */
-    @Override
-    public void improveDefence(float defence){
-        this.health += defence;
-    }
-
-    /**
-     * @see Creature#improveDamage(float)
-     * @param damage number of points to increase
-     */
-    @Override
-    public void improveDamage(float damage){
-        this.strength += damage;
-    }
-
-    /**
-     * @see Creature#tryEquipWeapon(Weapon)
-     * @param weapon product
-     * @return boolean
-     */
-    @Override
-    public boolean tryEquipWeapon(Weapon weapon){
-        if (this.freeHands >= weapon.getRequiredHands()) {
-            currentWeapons.add(weapon);
-            this.freeHands -= weapon.getRequiredHands();
-            this.inventory.removeProduct(weapon);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @see Creature#removeWeapon(Weapon)
-     * @param weapon product
-     * @return boolean
-     */
-    @Override
-    public boolean removeWeapon(Weapon weapon){
-        if (currentWeapons.contains(weapon)){
-            currentWeapons.remove(weapon);
-            this.freeHands += weapon.getRequiredHands();
-            this.inventory.addProduct(weapon);
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Set the mana while creating new creature
-     * @param mp mana value
-     */
-    public void setMp(int mp) {
-        this.mana = mp;
-        this.currentMana = mp;
-    }
-
-    /**
-     * Getter for hero strength
-     * @return float value
-     */
-    public float getStrength() {
-        return strength;
-    }
-
-    /**
-     * Setter for strength
-     * @param strength float value
-     */
-    public void setStrength(int strength) {
-        this.strength = strength;
-    }
-
-    /**
-     * Getter for dexterity
-     * @return float value
-     */
-    public float getDexterity() {
-        return dexterity;
-    }
-
-    /**
-     * Setter for dexterity
-     * @param dexterity float value
-     */
-    public void setDexterity(int dexterity) {
-        this.dexterity = dexterity;
-    }
-
-    /**
-     * Getter for experience
-     * @return float value
-     */
-    public float getExperience() {
-        return experience;
-    }
-
-    /**
-     * Setter for experience
-     * @param experience integer value
-     */
-    public void setExperience(int experience) {
-        this.experience = experience;
-    }
-
-    /**
-     * Getter for agility
-     * @return float value
-     */
-    public float getAgility() {
-        return agility;
-    }
-
-    /**
-     * setter for agility
-     * @param agility integer value
-     */
-    public void setAgility(int agility) {
-        this.agility = agility;
-    }
-
-    /**
-     * Getter for inventory
-     * @return Inventory object (CreatureInventory)
-     */
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    /**
-     * Getter for accessing wallet
-     * @return Wallet object
-     */
-    public Wallet getWallet() {
-        return wallet;
-    }
-
-    /**
-     * @see AbstractCreature#seekInformation()
-     * @return String array
-     */
-    @Override
-    public String[] seekInformation() {
-        return new String[]{this.name,
-                ""+this.currentHealth+"/"+this.health,
-                ""+this.currentMana+"/"+this.mana,
-                (this.isAlive() ? "YES" : "NO"),
-                String.valueOf(this.strength),
-                String.valueOf(this.experience),
-                String.valueOf(this.dexterity),
-                String.valueOf(this.agility),
-                (this.getCurrentWeapons() != null ? this.getCurrentWeapons() : ""),
-                (this.getCurrentArmor() != null ? this.getCurrentArmor().getName() : ""),
-                String.valueOf(this.wallet.getGold())
-        };
-    }
-
-    /**
-     * Get all weapons in hand right now
-     * This is for printing stuff in console
-     * @return String of all those weapons
-     */
-    public String getCurrentWeapons(){
-        String[] strings = new String[this.currentWeapons.size()];
-        for(int i = 0; i < this.currentWeapons.size(); i++){
-            strings[i] = this.currentWeapons.get(i).toString();
-        }
-        return String.join("/", strings);
-    }
-
-    /**
-     * Get current armor in on Creature
-     * This is for printing stuff
-     * @return Armor object
-     */
-    public Armor getCurrentArmor() {
-        return currentArmor;
-    }
-
-    /**
-     * @see AbstractCreature#getAttackImpact(CreatureBattleMove) 
-     * @param creatureBattleMove based on the ATTACK OR CAST
-     * @return string
-     */
-    @Override
-    public int getAttackImpact(CreatureBattleMove creatureBattleMove) {
-        int damage = 0;
-        if (currentWeapons.size() == 0){
-            damage += this.strength;
-        }
-        for (Weapon weapon : currentWeapons){
-            damage += (int)((this.strength + weapon.getDamageValue()) * 0.5);
-        }
-        return damage;
-    }
-
-    /**
-     * @see AbstractCreature#updateAttackImpact(int)
-     * @param damage integer
-     */
-    @Override
-    public void updateAttackImpact(int damage) {
-        if (Utility.rollDice() > this.agility * 100){
-            System.out.println(""+ this.getName() + " Dodge the attack!!");
-        } else {
-            if (this.isAlive()){
-                int damageReduction = 0;
-                if (this.currentArmor != null){
-                    System.out.println(""+this.currentArmor.getName() + " using "+this.getName()+" Armor to defended upto "+this.currentArmor.getDamageReductionValue());
-                    damageReduction = (int)this.currentArmor.getDamageReductionValue();
-                }
-                this.currentHealth -= (damage - damageReduction);
-                this.currentHealth = Math.max(this.currentHealth, 0);
-                if (this.currentHealth == 0){
-                    this.setDead();
-                }
-            }
-        }
-    }
-
-    /**
-     * Heal the creature with the potion given in parameter
-     * @param potion product
-     */
-    public void heal(Potion potion){
-        for (CreatureAttributes attribute : potion.getAttributesAffected()){
+    protected void heal(Potion potion){
+        for (CreatureAttributes attribute : potion.getAttributes()){
             switch (attribute){
-                case HP:
-                    this.currentHealth += potion.getHealValue();
+                case HEALTH:
+                    increaseHealth(potion.getHealValue());
                     break;
-                case MP:
-                    this.currentMana += potion.getHealValue();
+                case MANA:
+                    increaseMana(potion.getHealValue());
                     break;
                 case STRENGTH:
-                    this.strength += potion.getHealValue();
+                    increaseStrength(potion.getHealValue());
                     break;
                 case DEXTERITY:
-                    this.dexterity += potion.getHealValue();
-                    break;
-                case EXPERIENCE:
-                    this.experience += potion.getHealValue();
+                    increaseDexterity(potion.getHealValue());
                     break;
                 case AGILITY:
-                    this.agility += potion.getHealValue();
+                    increaseAgility(potion.getHealValue());
                     break;
                 default:
                     break;
             }
         }
-        this.inventory.consumeProduct(potion);
+        // TODO: (shubham) remember to notify observer that potion is used
+    }
+
+    @Override
+    public void increaseDamage(double damage) {
+        increaseStrength(damage);
+    }
+
+    @Override
+    public void increaseDefence(double defence) {
+        this.defence += defence;
+    }
+
+    @Override
+    public void increaseDexterity(double dexterity){
+        this.dexterity += dexterity;
+    }
+
+    @Override
+    public void increaseHealth(double health) {
+        this.health += health;
+    }
+
+    private void increaseMana(double mana){
+        this.mana += mana;
     }
 
     /**
-     * @see AbstractCreature#levelUp()
+     * Level up the hero when hero gains
+     * experience = current_level * 10
      */
     @Override
-    public void levelUp(){
+    protected void levelUp(){
         super.levelUp();
         this.mana += this.mana * 1.1;
-        this.experience += this.experience * 10;
+        levelUpFavouredSkills();
     }
 
-    /**
-     * @see AbstractCreature#regain()
-     */
+    protected abstract void levelUpFavouredSkills();
+
+    public void revive(){
+        super.revive();
+        this.health = this.baseHealth * 0.5;
+        this.mana = this.baseMana * 0.5;
+    }
+
     @Override
-    public void regain(){
-        this.currentHealth += this.health * 0.1;
-        this.currentMana += this.currentMana * 0.1;
+    public boolean typeEquals(Creature creature) {
+        return creature instanceof Hero;
     }
 
     /**
-     * Gain experience after battle
-     * @param exp integer
+     * use mana when cast a spell in attack
+     * @param mana mana to reduce
      */
-    public void gainExperience(int exp){
-        this.experience += exp;
+    public void useMana(double mana) throws IllegalAccessException {
+        if (this.mana >= mana){
+            this.mana -= mana;
+        }
+        throw new IllegalAccessException("Not Enough Mana!");
     }
 
-    /**
-     * Game gold after battle
-     * @param gold integer
-     */
-    public void gainGold(int gold){
-        this.wallet.credit(gold);
-    }
-
-    /**
-     * @see AbstractCreature#notifyObservers()
-     */
-    @Override
-    public void notifyObservers() {
-        InventoryPublisher.getInstance().notifyObservers(this.inventory, this);
-    }
-
-    /**
-     * Energise the hero with half of base hp
-     */
-    @Override
-    public void energize() {
-        super.energize();
-        this.currentHealth += this.health * 0.5;
-        this.currentMana += this.currentMana * 0.5;
+    public void usePotion(Potion potion){
+        heal(potion);
     }
 }

@@ -1,18 +1,15 @@
 package creature;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An enum which helps in comparison for increase and decrease of attributes
  */
 public enum CreatureAttributes {
-    HP,
-    MP,
+    HEALTH,
+    MANA,
     STRENGTH,
     DEXTERITY,
-    EXPERIENCE,
     AGILITY;
 
     /**
@@ -20,7 +17,7 @@ public enum CreatureAttributes {
      * @param attributesAffected set of attributes to show
      * @return convert all attributes in string separated with '/'
      */
-    public static String flatAttributesAffected(Set<CreatureAttributes> attributesAffected){
+    public static String flatAttributes(Set<CreatureAttributes> attributesAffected){
         List<String> stringList = new ArrayList<>();
         for(CreatureAttributes creatureAttributes : attributesAffected){
             stringList.add(creatureAttributes.toString());
