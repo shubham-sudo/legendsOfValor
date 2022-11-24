@@ -1,35 +1,35 @@
 package product;
 
 
-import creature.AbstractCreature;
+import creature.*;
 
 /**
  * Weapon product to fight against opponent
  */
-public class Weapon extends Product implements Wearable{
-    private final float damageValue;
+public class Weapon extends Product implements Equipable{
+    private final double damageValue;
     private final int requiredHands;
 
     /**
-     * Creates a new weapon
-     * @param name name of weapon
-     * @param level level of weapon
-     * @param price cost of the weapon
-     * @param description description of the weapon
-     * @param damage damage produced by the weapon
-     * @param requiredHand number of hands required to hold it
+     * creates a new product
+     * @param name          name of the product
+     * @param level         level of the product
+     * @param price         price of the product
+     * @param description   description of the product
+     * @param damage        damage produced by the weapon
+     * @param requiredHands number of hands required to hold it
      */
-    public Weapon(String name, int level, float price, String description, float damage, int requiredHand) {
+    public Weapon(String name, int level, float price, String description, double damage, int requiredHands) {
         super(name, level, price, description);
         this.damageValue = damage;
-        this.requiredHands = requiredHand;
+        this.requiredHands = requiredHands;
     }
 
     /**
      * Getter for the damage
      * @return float value
      */
-    public float getDamageValue() {
+    public double getDamageValue() {
         return damageValue;
     }
 
@@ -42,54 +42,35 @@ public class Weapon extends Product implements Wearable{
     }
 
     /**
-     * @see Product#getInfo()
-     * @return string array
-     */
-    @Override
-    public String[] getInfo() {
-        return new String[]{
-                this.name,
-                String.valueOf(this.level),
-                String.valueOf(this.price),
-                this.productCode,
-                this.getClass().getSimpleName(),
-                String.valueOf(this.damageValue)
-        };
-    }
-
-    /**
-     * @see Wearable#isWearable(AbstractCreature)
-     * @param abstractCreature creature trying to use it
+     * @see Equipable#isSafeToEquip(Hero)
+     * @param hero hero trying to equip it
      * @return boolean
      */
     @Override
-    public boolean isWearable(AbstractCreature abstractCreature) {
-        return abstractCreature.getFreeHands() >= this.getRequiredHands();
+    public boolean isSafeToEquip(Hero hero) {
+        return hero.getFreeHands() >= this.getRequiredHands();
     }
 
     /**
-     * @see Wearable#wear(AbstractCreature)
-     * @param abstractCreature creature who wear it
+     * @see Equipable#equip(Hero)
+     * @param hero hero who equip it
      * @return boolean
      */
     @Override
-    public boolean wear(AbstractCreature abstractCreature) {
-        if (!isWearable(abstractCreature)){
-            return false;
+    public boolean equip(Hero hero) throws IllegalAccessException {
+        if (isSafeToEquip(hero)){
+            hero.equipWeapon(this);
+            return true;
         }
-        return abstractCreature.tryEquipWeapon(this);
+        return false;
     }
 
     /**
-     * @see Wearable#remove(AbstractCreature)
-     * @param abstractCreature creature who want to remove
-     * @return boolean
+     * @see Equipable#drop(Hero)
+     * @param hero creature who want to remove
      */
     @Override
-    public boolean remove(AbstractCreature abstractCreature) {
-        if (abstractCreature.getBusyHands() < this.getRequiredHands()){
-            return false;
-        }
-        return abstractCreature.removeWeapon(this);
+    public void drop(Hero hero) {
+        hero.dropWeapon(this);
     }
 }

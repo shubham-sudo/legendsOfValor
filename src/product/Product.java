@@ -4,15 +4,6 @@ package product;
  * Base abstract product class for all the products creature can have
  */
 public abstract class Product {
-    public static final String[] tableHeader = new String[]{
-            "Product Name",
-            "Level",
-            "Price",
-            "Product Code",
-            "Type",
-            "Impact Value",
-            "More Info"
-    };
     protected final String name;
     protected final int level;
     protected final float price;
@@ -73,12 +64,6 @@ public abstract class Product {
     public String getProductCode(){
         return this.productCode;
     }
-
-    /**
-     * returns the information about the product to print in console
-     * @return string array
-     */
-    public abstract String[] getInfo();
 
     /**
      * To string for the product

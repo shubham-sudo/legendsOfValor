@@ -1,22 +1,23 @@
 package product;
 
-import creature.AbstractCreature;
+import creature.*;
 
 /**
  * An interface for all consumable type of products
  */
 public interface Consumable {
-    /**
-     * Consume a product after use
-     * @param abstractCreature creature who used this product
-     * @return boolean
-     */
-    boolean consume(AbstractCreature abstractCreature);
 
     /**
-     * Check if the product is already consumed
-     * @param abstractCreature creature who is trying to consume it
+     * Check if the product is safe to consume
+     * @param hero creature who want to consume
+     * @return true if possible, false otherwise
+     */
+    boolean isSafeToConsume(Hero hero);
+
+    /**
+     * Consume a product after use
+     * @param hero creature who used this product
      * @return boolean
      */
-    boolean isConsumable(AbstractCreature abstractCreature);
+    boolean consume(Hero hero);
 }

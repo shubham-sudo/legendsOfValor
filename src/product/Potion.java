@@ -9,30 +9,30 @@ import java.util.Set;
  */
 public class Potion extends  Product implements Consumable{
     private boolean consumed;
-    private final float healValue;
-    private final Set<CreatureAttributes> attributesAffected;
+    private final double healValue;
+    private final Set<CreatureAttributes> attributes;
 
     /**
      * Create a new potion product
-     * @param name name of the potion
-     * @param level level of the potion
-     * @param price cost of the potion
-     * @param description description of the product
+     * @param name         name of the potion
+     * @param level        level of the potion
+     * @param price        cost of the potion
+     * @param description  description of the product
      * @param healingValue healing value
-     * @param attributesAffected attributes healed on use
+     * @param attributes   attributes healed on use
      */
-    public Potion(String name, int level, float price, String description, float healingValue, Set<CreatureAttributes> attributesAffected) {
+    public Potion(String name, int level, float price, String description, double healingValue, Set<CreatureAttributes> attributes) {
         super(name, level, price, description);
         this.consumed = false;
         this.healValue = healingValue;
-        this.attributesAffected = attributesAffected;
+        this.attributes = attributes;
     }
 
     /**
      * getter for the heal value
      * @return float
      */
-    public float getHealValue() {
+    public double getHealValue() {
         return healValue;
     }
 
@@ -40,51 +40,34 @@ public class Potion extends  Product implements Consumable{
      * Getter for the attributes affected on use
      * @return set of attributes
      */
-    public Set<CreatureAttributes> getAttributesAffected() {
-        return attributesAffected;
-    }
-
-    /**
-     * @see Product#getInfo()
-     * @return string array
-     */
-    @Override
-    public String[] getInfo() {
-        return new String[]{
-                this.name,
-                String.valueOf(this.level),
-                String.valueOf(this.price),
-                this.productCode,
-                this.getClass().getSimpleName(),
-                String.valueOf(this.healValue),
-                CreatureAttributes.flatAttributesAffected(this.attributesAffected)
-        };
-    }
-
-    /**
-     * Consume a product after use
-     * @see Consumable#consume(AbstractCreature)
-     * @param abstractCreature creature who used this product
-     * @return boolean
-     */
-    @Override
-    public boolean consume(AbstractCreature abstractCreature) {
-        if (!isConsumable(abstractCreature)){
-            return false;
-        }
-        this.consumed = true;
-        abstractCreature.notifyObservers();
-        return true;
+    public Set<CreatureAttributes> getAttributes() {
+        return attributes;
     }
 
     /**
      * True if you can be consumed again
-     * @see Consumable#isConsumable(AbstractCreature)
-     * @param abstractCreature creature who is trying to consume it
+     * @see Consumable#isSafeToConsume(Hero)
+     * @param hero creature who wants to consume
      * @return boolean
      */
     @Override
-    public boolean isConsumable(AbstractCreature abstractCreature) {
+    public boolean isSafeToConsume(Hero hero) {
         return !consumed;
+    }
+
+    /**
+     * Consume a product
+     * @see Consumable#consume(Hero)
+     * @param hero creature who used this product
+     * @return boolean
+     */
+    @Override
+    public boolean consume(Hero hero) {
+        if (!isSafeToConsume(hero)){
+            hero.usePotion(this);
+            this.consumed = true;
+            return true;
+        }
+        return false;
     }
 }

@@ -65,6 +65,10 @@ public abstract class Hero extends AbstractCreature {
         this.health = Math.max((this.health - health), 0);
     }
 
+    public void decreaseMana(double mana) {
+        this.mana = Math.max((this.mana - mana), 0);
+    }
+
     @Override
     public String displayValue() {
         return "H"+id;
