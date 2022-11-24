@@ -18,6 +18,7 @@ public class Map {
         this.numberOfLanes = numberOfLanes;
         this.lanes = new Lane[numberOfLanes];
         this.laneSize = laneSize;
+        initialize();
     }
 
     public Map(){
@@ -32,10 +33,10 @@ public class Map {
         return laneSize;
     }
 
-    public void initialize(){
+    private void initialize(){
         for (int i = 0; i < numberOfLanes; i++){
             lanes[i] = new PassableLane(laneSize);
-            lanes[i].initializeLane();
+            lanes[i].initialize();
         }
     }
 
@@ -66,7 +67,7 @@ public class Map {
         while (i < (2 * (numberOfLanes-1))){
             displayLanes[i] = lanes[k];
             displayLanes[i+1] = new ImpassibleLane(laneSize);
-            displayLanes[i+1].initializeLane();
+            displayLanes[i+1].initialize();
             i += 2;
             k += 1;
         }

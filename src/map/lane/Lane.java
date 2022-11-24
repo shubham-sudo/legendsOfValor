@@ -58,8 +58,10 @@ public abstract class Lane {
         return width;
     }
 
-    public void initializeLane(){
-        buildLane();
+    public void initialize() {
+        if (spaces == null){
+            buildLane();
+        }
     }
 
     protected abstract void buildLane();
