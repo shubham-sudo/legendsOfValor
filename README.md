@@ -32,3 +32,18 @@ QQ - Do we need both Nexus and Fortress ??
   - Market
   - InAccessible
   - Common
+
+
+NEW IDEAS
+
+Observer patterns
+  - Once any round finishes ... call the observer to regain some health and mana to all the live heroes
+  - Once the battle ends ... call the observer to revive all the heroes who had fainted.
+  - Once the battle ends ... call the observer to gain experience and gold to all those heroes who were left alive.
+  - Update the Creature inventory once any hero CAST the spell or use Potion ... reason being that product is consumable
+
+
+## IF GETS TIME TO IMPLEMENT  (Think this as backend stuff)
+  - Controller who can add new products to the market
+  - Controller who can add new Monsters to the Game
+  - Controller who can add new Heroes to the Game
