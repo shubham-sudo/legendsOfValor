@@ -18,6 +18,9 @@ public class Map {
         this.numberOfLanes = numberOfLanes;
         this.lanes = new Lane[numberOfLanes];
         this.laneSize = laneSize;
+        // TODO: (shubham) maintain a list of all creatures in this lane and their current position
+        //  lane should give all the valid moves for a particular creature
+        //  this should also include all the teleport moves also.
         initialize();
     }
 
