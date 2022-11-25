@@ -50,8 +50,12 @@ public class MainController {
     /**
      * Starting point for everything
      */
-    public void execute(){
+    public void execute() {
         gameMenu();
-        this.gameController.run();
+        try {
+            this.gameController.run();
+        } catch (IllegalAccessException iae){
+            iae.printStackTrace();
+        }
     }
 }

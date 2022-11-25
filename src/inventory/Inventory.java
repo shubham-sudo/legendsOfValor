@@ -5,6 +5,7 @@ import product.ProductType;
 
 import java.util.*;
 
+
 /**
  * abstract inventory for Market and Creatures
  */
@@ -61,12 +62,24 @@ public abstract class Inventory {
     }
 
     /**
+     * Check if inventory has the product
+     * @param productCode product code
+     * @return true if present, false otherwise
+     */
+    public boolean hasProduct(String productCode) {
+        return productCountMap.containsKey(productCode);
+    }
+
+    /**
      * get product from the inventory if exists using product code
      * @param productCode product code of the product to fetch
      * @return product or null
      */
     public Product getProduct(String productCode){
         Product product = null;
+        if (productCode == null){
+            return null;
+        }
         if (this.products.containsKey(productCode)){
             product = this.products.get(productCode);
         }
@@ -85,23 +98,9 @@ public abstract class Inventory {
     /**
      * Show method shows the inventory products
      */
-    public abstract void show();
+    public abstract ArrayList<Product> show();
 
-    /**
-     * Show specific products from inventory based on the given product type
-     * @param productType type of the product
-     */
-    public abstract void showSpecificProducts(ProductType productType);
-
-    /**
-     * Consume the product if it is consumable
-     * Count would be reduced from the inventory for these products
-     *
-     * @param product product
-     */
-    public void consumeProduct(Product product){
-        removeProduct(product);
-    }
+    public abstract ArrayList<Product> show(ProductType type);
 }
 
 

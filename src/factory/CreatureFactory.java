@@ -21,14 +21,7 @@ public class CreatureFactory {
         List<CreatureDataClass.HeroCreature> heroCreatures = CreatureDataClass.heroPaladins();
         ArrayList<Hero> paladinHeros = new ArrayList<>();
         for (CreatureDataClass.HeroCreature heroCreature : heroCreatures){
-            Hero hero = new Paladins(heroCreature.name, heroCreature.hp, heroCreature.money);
-            hero.setHp(heroCreature.hp);
-            hero.setCurrentHp(heroCreature.hp);
-            hero.setMp(heroCreature.mp);
-            hero.setStrength(heroCreature.strength);
-            hero.setDexterity(heroCreature.dexterity);
-            hero.setAgility(heroCreature.agility);
-            hero.setExperience(heroCreature.experience);
+            Hero hero = new Paladins(heroCreature.name, heroCreature.hp, heroCreature.mp, heroCreature.strength, heroCreature.agility, 2, heroCreature.dexterity, heroCreature.experience);
             paladinHeros.add(hero);
         }
         return paladinHeros;
@@ -42,14 +35,7 @@ public class CreatureFactory {
         List<CreatureDataClass.HeroCreature> heroCreatures = CreatureDataClass.heroSorcerers();
         ArrayList<Hero> sorcerersHeros = new ArrayList<>();
         for (CreatureDataClass.HeroCreature heroCreature : heroCreatures){
-            Hero hero = new Sorcerers(heroCreature.name, heroCreature.hp, heroCreature.money);
-            hero.setHp(heroCreature.hp);
-            hero.setCurrentHp(heroCreature.hp);
-            hero.setMp(heroCreature.mp);
-            hero.setStrength(heroCreature.strength);
-            hero.setDexterity(heroCreature.dexterity);
-            hero.setAgility(heroCreature.agility);
-            hero.setExperience(heroCreature.experience);
+            Hero hero = new Sorcerers(heroCreature.name, heroCreature.hp, heroCreature.mp, heroCreature.strength, heroCreature.agility, 2, heroCreature.dexterity, heroCreature.experience);
             sorcerersHeros.add(hero);
         }
         return sorcerersHeros;
@@ -63,14 +49,7 @@ public class CreatureFactory {
         List<CreatureDataClass.HeroCreature> heroCreatures = CreatureDataClass.heroWarriors();
         ArrayList<Hero> warriorsHeros = new ArrayList<>();
         for (CreatureDataClass.HeroCreature heroCreature : heroCreatures){
-            Hero hero = new Warriors(heroCreature.name, heroCreature.hp, heroCreature.money);
-            hero.setHp(heroCreature.hp);
-            hero.setCurrentHp(heroCreature.hp);
-            hero.setMp(heroCreature.mp);
-            hero.setStrength(heroCreature.strength);
-            hero.setDexterity(heroCreature.dexterity);
-            hero.setAgility(heroCreature.agility);
-            hero.setExperience(heroCreature.experience);
+            Hero hero = new Warriors(heroCreature.name, heroCreature.hp, heroCreature.mp, heroCreature.strength, heroCreature.agility, 2, heroCreature.dexterity, heroCreature.experience);
             warriorsHeros.add(hero);
         }
         return warriorsHeros;
@@ -86,13 +65,6 @@ public class CreatureFactory {
             monsterCreatures = CreatureDataClass.monsterCreature();
         }
         CreatureDataClass.MonsterCreature monsterCreature = monsterCreatures.get(0);
-        Monster monster = new Monster(monsterCreature.name, monsterCreature.hp);
-        monster.setLevel(monsterCreature.level);
-        monster.setHp(monsterCreature.hp);
-        monster.setCurrentHp(monsterCreature.hp);
-        monster.setDamage(monsterCreature.damage);
-        monster.setDefence(monsterCreature.defense);
-        monster.setDodge(monsterCreature.dodge);
-        return monster;
+        return new Monster(monsterCreature.name, monsterCreature.hp, monsterCreature.damage, monsterCreature.defense, monsterCreature.dodge);
     }
 }

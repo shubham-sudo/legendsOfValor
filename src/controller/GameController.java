@@ -114,5 +114,5 @@ public interface GameController {
     /**
      * abstract method used for running any game
      */
-    void run();
+    void run() throws IllegalAccessException;
 }

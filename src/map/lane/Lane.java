@@ -21,6 +21,9 @@ public abstract class Lane {
     public Lane(int length){
         this.id = ++ID;
         this.length = length;
+        // TODO: (shubham) maintain a list of all creatures in this lane and their current position
+        //  lane should give all the valid moves for a particular creature
+        //  this should also include all the teleport moves also.
     }
 
     public Lane(){
@@ -59,9 +62,7 @@ public abstract class Lane {
     }
 
     public void initialize() {
-        if (spaces == null){
-            buildLane();
-        }
+        buildLane();
     }
 
     protected abstract void buildLane();

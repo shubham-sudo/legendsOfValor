@@ -1,10 +1,10 @@
 package inventory;
 
 import product.*;
-import utility.Utility;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
+import java.util.stream.Collectors;
+
 
 /**
  * Child class of the Inventory to define different function for the creature
@@ -18,96 +18,52 @@ public class CreatureInventory extends Inventory {
      */
     @Override
     public void addProduct(Product product) {
-        if (product instanceof Consumable){
-            if (productCountMap.containsKey(product.getProductCode())){
-                productCountMap.put(product.getProductCode(), productCountMap.get(product.getProductCode()) + 1);
-            } else {
-                productCountMap.put(product.getProductCode(), 1);
-                products.put(product.getProductCode(), product);
-            }
-        }
-        else {
-            if (!this.products.containsKey(product.getProductCode())){
-                this.products.put(product.getProductCode(), product);
-                this.productCountMap.put(product.getProductCode(), 1);
-            }
-        }
+        super.addProduct(product);
+        // TODO: (shubham) notify that the inventory is updated
+    }
+
+    /**
+     * Remove product from the Creature inventory
+     * @param product product to remove
+     */
+    @Override
+    public void removeProduct(Product product) {
+        super.removeProduct(product);
+        // TODO: (shubham) notify that the inventory is updated
     }
 
     /**
      * Shows the creature inventory in the console
      */
     @Override
-    public void show() {
-        String[] creatureInventoryHeader = new String[Product.tableHeader.length + 1];
-        System.arraycopy(Product.tableHeader, 0, creatureInventoryHeader, 0, Product.tableHeader.length);
-        creatureInventoryHeader[Product.tableHeader.length] = "Quantity";
-        System.out.println(Utility.paddedString(creatureInventoryHeader));
-        Iterator<Product> it = this.productsIterator();
-
-        while (it.hasNext()){
-            Product product = it.next();
-            String[] productInfo = product.getInfo();
-            String[] strings = new String[productInfo.length + 1];
-            System.arraycopy(productInfo, 0, strings, 0, Math.min(Product.tableHeader.length, productInfo.length));
-            strings[strings.length-1] = String.valueOf(this.productCountMap.get(product.getProductCode()));
-            System.out.println(Utility.paddedString(strings));
-        }
-        System.out.println();
-    }
-
-    /**
-     * shows the filtered products from the inventory
-     * @param products products to show
-     */
-    public void show(ArrayList<Product> products){
-        String[] creatureInventoryHeader = new String[Product.tableHeader.length + 1];
-        System.arraycopy(Product.tableHeader, 0, creatureInventoryHeader, 0, Product.tableHeader.length);
-        creatureInventoryHeader[Product.tableHeader.length] = "Quantity";
-        System.out.println(Utility.paddedString(creatureInventoryHeader));
-
-        for (Product product : products) {
-            String[] productInfo = product.getInfo();
-            String[] strings = new String[productInfo.length + 1];
-            System.arraycopy(productInfo, 0, strings, 0, Math.min(Product.tableHeader.length, productInfo.length));
-            strings[strings.length - 1] = String.valueOf(this.productCountMap.get(product.getProductCode()));
-            System.out.println(Utility.paddedString(strings));
-        }
-        System.out.println();
+    public ArrayList<Product> show() {
+        return new ArrayList<Product>(products.values()){};
     }
 
     /**
      * Shows the specific type of product from the inventory
-     * @param productType type of the product
+     * @param type type of the product
      */
-    public void showSpecificProducts(ProductType productType){
-        ArrayList<Product> products = new ArrayList<>();
-        switch (productType){
+    @Override
+    public ArrayList<Product> show(ProductType type){
+        List<Product> products;
+
+        switch (type){
             case ARMOR:
+                products = this.products.values().stream().filter(product -> product instanceof Armor).collect(Collectors.toList());
+                return new ArrayList<Product>(products){};
             case WEAPON:
-                for (Product product : this.products.values()){
-                    if (product instanceof Wearable){
-                        products.add(product);
-                    }
-                }
-                break;
+                products = this.products.values().stream().filter(product -> product instanceof Weapon).collect(Collectors.toList());
+                return new ArrayList<Product>(products){};
             case SPELL:
-                for (Product product : this.products.values()){
-                    if (product instanceof Spell){
-                        products.add(product);
-                    }
-                }
-                break;
+                products = this.products.values().stream().filter(product -> product instanceof Spell).collect(Collectors.toList());
+                return new ArrayList<Product>(products){};
             case POTION:
-                for (Product product : this.products.values()){
-                    if (product instanceof Potion){
-                        products.add(product);
-                    }
-                }
-                break;
-            default:
-                break;
+                products = this.products.values().stream().filter(product -> product instanceof Potion).collect(Collectors.toList());
+                return new ArrayList<Product>(products){};
+            case ALL:
+                return show();
         }
-        show(products);
+        return new ArrayList<Product>(){};
     }
 }
