@@ -2,27 +2,31 @@ package map;
 
 import creature.*;
 import map.lane.*;
-import map.space.*;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 
-public class Map {
-    private static final int DEFAULT_LANES = 3;
-    private static final int MAX_LANES = 6;
+public class BoardMap {
+    public static final int DEFAULT_LANES = 3;
+    public static final int MAX_LANES = 6;
     private final int numberOfLanes;
     private final int laneSize;
     private final Lane[] lanes;
 
-    public Map(int numberOfLanes, int laneSize){
+    public BoardMap(int numberOfLanes, int laneSize){
         this.numberOfLanes = numberOfLanes;
         this.lanes = new Lane[numberOfLanes];
         this.laneSize = laneSize;
         initialize();
     }
 
-    public Map(){
+    public BoardMap(){
         this(DEFAULT_LANES, Lane.DEFAULT_LENGTH);
+    }
+
+    public int getPlayableLanes(){
+        return numberOfLanes;
     }
 
     public int getNumberOfLanes() {
@@ -31,6 +35,20 @@ public class Map {
 
     public int getLaneSize() {
         return laneSize;
+    }
+
+    public void sendHeroesOnMap(ArrayList<Creature> creatures) throws IllegalAccessException {
+        for (int i = 0; i < numberOfLanes; i++){
+            Lane lane = lanes[i];
+            lane.occupySpace(creatures.get(i), lane.getLength()-1, lane.getWidth()-1);
+        }
+    }
+
+    public void sendMonstersOnMap(ArrayList<Creature> creatures) throws IllegalAccessException {
+        for (int i = 0; i < numberOfLanes; i++) {
+            Lane lane = lanes[i];
+            lane.occupySpace(creatures.get(i), 0, 0);
+        }
     }
 
     private void initialize(){
@@ -47,20 +65,11 @@ public class Map {
         return lanes[index];
     }
 
-    public Space getSpace(int laneIndex, int spaceRow, int spaceCol) throws NoSuchElementException{
-        return getLane(laneIndex).getSpace(spaceRow, spaceCol);
-    }
-
     public void occupySpace(int laneIndex, int spaceRow, int spaceCol, Creature creature) throws IllegalAccessException {
-        Space space = getSpace(laneIndex, spaceRow, spaceCol);
-        if (space.isSafeToOccupy(creature)){
-            space.occupy(creature);
-        } else {
-            throw new IllegalAccessException("Invalid Access!!!");
-        }
+        getLane(laneIndex).occupySpace(creature, spaceRow, spaceCol);
     }
 
-    public Lane[] getMap(){
+    public Lane[] map(){
         Lane[] displayLanes = new Lane[(2 * numberOfLanes) - 1];
         int i = 0;
         int k = 0;

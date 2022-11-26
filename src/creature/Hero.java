@@ -147,7 +147,7 @@ public abstract class Hero extends AbstractCreature {
         return this.hands;
     }
 
-    public Inventory getHeroesInventory(){
+    public Inventory inventory(){
         return this.inventory;
     }
 

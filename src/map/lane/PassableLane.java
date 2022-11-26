@@ -12,18 +12,14 @@ public class PassableLane extends Lane {
     private static final double EACH_SPECIAL_SPACES = 0.20;
     private static final double PLAIN_SPACE_PERCENT = 0.40;
 
-    public PassableLane(int length, int width){
+    public PassableLane(int length){
         super(length);
-        this.width = width;
+        this.width = Lane.DEFAULT_WIDTH;
         this.spaces = new Space[getLength()][width];
     }
 
-    public PassableLane(int length){
-        this(length, 2);
-    }
-
     public PassableLane(){
-        this(Lane.DEFAULT_LENGTH, 2);
+        this(Lane.DEFAULT_LENGTH);
     }
 
     @Override

@@ -48,6 +48,7 @@ public abstract class AbstractCreature implements Creature {
      * getter for level
      * @return int
      */
+    @Override
     public int getLevel() {
         return level;
     }
@@ -82,6 +83,7 @@ public abstract class AbstractCreature implements Creature {
      * getter for alive
      * @return boolean
      */
+    @Override
     public boolean isAlive(){
         return this.alive;
     }

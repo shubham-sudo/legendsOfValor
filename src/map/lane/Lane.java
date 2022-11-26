@@ -1,7 +1,10 @@
 package map.lane;
 
+import creature.Creature;
+import map.Position;
 import map.space.Space;
 
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 
@@ -12,15 +15,18 @@ import java.util.NoSuchElementException;
  */
 public abstract class Lane {
     public static final int DEFAULT_LENGTH = 8;
+    public static final int DEFAULT_WIDTH = 2;
     private static int ID = 0;
     private final int id;
     private final int length;
     protected int width;
     protected Space[][] spaces;
+    protected HashMap<Creature, Position> creatures;
 
     public Lane(int length){
         this.id = ++ID;
         this.length = length;
+        this.creatures = new HashMap<>();
         // TODO: (shubham) maintain a list of all creatures in this lane and their current position
         //  lane should give all the valid moves for a particular creature
         //  this should also include all the teleport moves also.
@@ -43,6 +49,18 @@ public abstract class Lane {
             return this.spaces[row][col];
         }
         throw new NoSuchElementException("Invalid index!");
+    }
+
+    protected boolean isSafeToOccupy(Creature creature, int spaceRow, int spaceCol) {
+        return true;
+    }
+
+    public void occupySpace(Creature creature, int spaceRow, int spaceCol) throws IllegalAccessException {
+        if (isSafeToOccupy(creature, spaceRow, spaceCol)) {
+            getSpace(spaceRow, spaceCol).occupy(creature);
+        } else {
+            throw new IllegalAccessException("Invalid Move!");
+        }
     }
 
     protected void setSpace(int row, int col, Space space) throws NoSuchElementException{

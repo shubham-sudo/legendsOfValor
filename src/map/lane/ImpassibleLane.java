@@ -10,18 +10,14 @@ import map.space.InaccessibleSpace;
  */
 public class ImpassibleLane extends Lane {
 
-    public ImpassibleLane(int length, int width){
+    public ImpassibleLane(int length){
         super(length);
-        this.width = width;
+        this.width = 1;
         this.spaces = new InaccessibleSpace[getLength()][width];
     }
 
-    public ImpassibleLane(int length){
-        this(length, 1);
-    }
-
     public ImpassibleLane(){
-        this(Lane.DEFAULT_LENGTH, 1);
+        this(Lane.DEFAULT_LENGTH);
     }
 
     protected void buildLane(){

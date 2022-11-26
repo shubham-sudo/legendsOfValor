@@ -13,7 +13,7 @@ import product.ProductType;
  * Market is another small mini-game which implements GameController
 */
 public class MarketController implements GameController {
-    private static final double SELLING_FACTOR = 0.5;
+    private static final double HERO_SELLING_FACTOR = 0.5;
     private final MarketFactory marketFactory;
     private Market market;
     private Hero customer;
@@ -99,7 +99,7 @@ public class MarketController implements GameController {
         } else if (marketMove == MarketMove.SELL){
             customer.inventory().removeProduct(product);
             market.inventory().addProduct(product);
-            customer.getWallet().credit(product.getPrice() * SELLING_FACTOR);
+            customer.getWallet().credit(product.getPrice() * HERO_SELLING_FACTOR);
         }
     }
 

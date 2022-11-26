@@ -19,6 +19,10 @@ public interface Creature {
 
     String displayValue();
 
+    public int getLevel();
+
+    public boolean isAlive();
+
     void increaseAgility(double agility);
 
     void increaseDamage(double damage);
