@@ -24,7 +24,7 @@ public abstract class Lane {
     protected HashMap<Creature, Position> creatures;
 
     public Lane(int length){
-        this.id = ++ID;
+        this.id = ID++;
         this.length = length;
         this.creatures = new HashMap<>();
         // TODO: (shubham) maintain a list of all creatures in this lane and their current position
@@ -51,16 +51,56 @@ public abstract class Lane {
         throw new NoSuchElementException("Invalid index!");
     }
 
-    protected boolean isSafeToOccupy(Creature creature, int spaceRow, int spaceCol) {
-        return true;
+    public boolean isOpponentNearBy(Creature creature, int row, int col){
+        int[][] nearByIndex = new int[][]{
+                {-1, -1},
+                {-1, 0},
+                {-1, +1},
+                {0, +1},
+                {+1, +1},
+                {+1, 0},
+                {+1, -1},
+                {0, -1},
+        };
+        boolean opponentNearBy = false;
+
+        for (int i = 0; i < nearByIndex.length; i++){
+            Space space;
+            try {
+                space = getSpace(row + nearByIndex[i][0], col + nearByIndex[i][1]);
+            } catch (NoSuchElementException nsee){
+//                nsee.printStackTrace();  // TODO: (shubham) remove this line
+                continue;
+            }
+            if (space.hasOpponent(creature)){
+                opponentNearBy = true;
+            }
+        }
+        return opponentNearBy;
+    }
+
+    public boolean isSafeToOccupy(Creature creature, int spaceRow, int spaceCol) {
+        try {
+            if (getSpace(spaceRow, spaceCol).isSafeToOccupy(creature)) {
+                return true;
+            }
+        } catch (NoSuchElementException nsee){
+            return false;
+        }
+        return false;
     }
 
     public void occupySpace(Creature creature, int spaceRow, int spaceCol) throws IllegalAccessException {
         if (isSafeToOccupy(creature, spaceRow, spaceCol)) {
             getSpace(spaceRow, spaceCol).occupy(creature);
+            creature.setCurrentPosition(id, spaceRow, spaceCol);
         } else {
             throw new IllegalAccessException("Invalid Move!");
         }
+    }
+
+    public void vacantSpace(Creature creature, int spaceRow, int spaceCol) {
+        getSpace(spaceRow, spaceCol).vacant(creature);
     }
 
     protected void setSpace(int row, int col, Space space) throws NoSuchElementException{

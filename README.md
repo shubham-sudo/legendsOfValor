@@ -3,6 +3,20 @@ Legends of Valor isa MOBA (multiplayer online battle arena)-like game. The playe
 
 # Map View
 ![map.png](map.png)
+![move.png](move.png)
+![teleport.png](teleport.png)
+
+# Test Move
+1
+no
+Shubham
+1
+1
+1
+1
+1
+1
+
 
 # Objects Structure
 

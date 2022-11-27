@@ -17,6 +17,8 @@ public interface Space {
 
     void vacant(Creature creature);
 
+    boolean hasOpponent(Creature creature);
+
     /**
      * Return the background color for this particular space
      * @return String

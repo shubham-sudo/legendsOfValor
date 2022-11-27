@@ -4,9 +4,11 @@ import creature.*;
 import factory.CreaturesFactory;
 import game.LegendsOfValor;
 import map.BoardMap;
+import map.Position;
 import map.lane.Lane;
 import map.space.Space;
 import move.GameMove;
+import move.Move;
 import player.Player;
 
 import java.util.ArrayList;
@@ -164,7 +166,7 @@ public class LegendsOfValorController implements GameController {
         System.out.println();
     }
 
-    private GameMove getMove(Creature creature){
+    private GameMove getGameMove(Creature creature){
         System.out.println();
         System.out.println("Possible Moves [u]UP, [d]DOWN, [r]RIGHT, [l]LEFT, [m]MARKET, [a]ATTACK, [c]CAST, [p]POTION, [e]EQUIP, [i]INFO, [b]RECALL, [t]TELEPORT");
         System.out.println("Enter move for " + creature.displayValue());
@@ -181,23 +183,84 @@ public class LegendsOfValorController implements GameController {
         return move;
     }
 
+    private Position getTeleportPosition(Creature creature){
+        Position teleportPosition = new Position();
+        System.out.println();
+        System.out.println("Enter details to teleport Hero - " + creature.displayValue());
+        System.out.println("Enter lane number to be teleported e.g. - 1");
+        teleportPosition.laneNumber = getIntFromUser();
+        System.out.println("Enter row number to be teleported in Lane - " + teleportPosition.laneNumber);
+        teleportPosition.rowNumber = getIntFromUser();
+        System.out.println("Enter col number to be teleported in Lane - " + teleportPosition.laneNumber);
+        teleportPosition.colNumber = getIntFromUser();
+        return teleportPosition;
+    }
+
+    private Move getMove(GameMove gameMove, Creature creature){
+        Move move = new Move(creature, creature.getHomeLane(), gameMove);
+        Position position = creature.getCurrentPosition();
+        move.laneNumber = position.laneNumber;
+        move.rowNumber = position.rowNumber;
+        move.colNumber = position.colNumber;
+        switch (gameMove){
+            case UP:
+                move.rowNumber = position.rowNumber - 1;
+                break;
+            case DOWN:
+                move.rowNumber = position.rowNumber + 1;
+                break;
+            case LEFT:
+                move.colNumber = position.colNumber - 1;
+                break;
+            case RIGHT:
+                move.colNumber = position.colNumber + 1;
+                break;
+            case RECALL:
+                move.laneNumber = creature.getHomeLane();
+                move.rowNumber = 0;
+                move.colNumber = 1;
+                // TODO (shubham): hard coded for time being, This will always goes to second col of lane
+                break;
+            case TELEPORT:
+                // Ask user for the lane number, row and column
+                Position teleportPosition = getTeleportPosition(creature);
+                move.laneNumber = teleportPosition.laneNumber;
+                move.rowNumber = teleportPosition.rowNumber;
+                move.colNumber = teleportPosition.colNumber;
+                break;
+            case ATTACK:
+            case CAST:
+            case EQUIP:
+            case POTION:
+            case MARKET:
+            case INFO:
+                move.laneNumber = position.laneNumber;
+                move.rowNumber = position.rowNumber;
+                move.colNumber = position.colNumber;
+        }
+        return move;
+    }
+
     private void driveGame(){
         // TODO: (shubham) while next turn ...
         //  iterate over creatures
         //  after every move check if the game can be played more or someone wins.
-        System.out.println("######## Game Started ########");
+        System.out.println("\n######## Game Started ########");
         while (game.notOver()){
             Player player = game.nextTurn();
 
             // one round
             for (Creature creature : player){
                 if (creature instanceof Hero){
-                    GameMove move = getMove(creature);
-
-                    // TODO: (shubham) if hero ask the user for move should force to attack
-                    //     if monster is near to the next move
-                    //  if hero ask for market .. check for the exact space and enter him to market
-                    //  UP, DOWN, RIGHT, LEFT, MARKET, ATTACK, CAST, POTION, EQUIP, INFO
+                    while (true) {
+                        GameMove gameMove = getGameMove(creature);
+                        Move move = getMove(gameMove, creature);
+                        if (game.isSafeMove(move)){
+                            game.playMove(move);
+                            break;
+                        }
+                        System.out.println("Invalid Move, Try again!!!");
+                    }
                 } else {
                     System.out.println("Monster " + creature.displayValue() + " playing his move");
                     // TODO: (shubham) if monster get automatic move should be biased to attack

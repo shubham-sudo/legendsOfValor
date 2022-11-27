@@ -4,6 +4,7 @@ import creature.Creature;
 import factory.*;
 import factory.MapFactory;
 import map.BoardMap;
+import move.GameMove;
 import move.Move;
 import player.Player;
 
@@ -64,7 +65,26 @@ public class LegendsOfValor extends Game{
         players.add(monsterPlayer);
     }
 
-    public void playMove(Move move){
+    public boolean isSafeMove(Move move){
+        if (move.gameMove == GameMove.ATTACK || move.gameMove == GameMove.RECALL
+            || move.gameMove == GameMove.INFO || move.gameMove == GameMove.MARKET) {
+            return true;
+        } else if (move.gameMove == GameMove.CAST || move.gameMove == GameMove.EQUIP
+            || move.gameMove == GameMove.POTION) {
+            // TODO (shubham) check if creature inventory has castable, equipable and potion objects
+        } else if (map.isSafeToOccupy(move)) {
+            return true;  // TODO (shubham): check if the move is safe
+        }
+        return false;
+    }
 
+    public void playMove(Move move){
+        if (isSafeMove(move)){
+            try {
+                map.occupySpace(move.laneNumber, move.rowNumber, move.colNumber, move.creature);
+            } catch (IllegalArgumentException | IllegalAccessException iae) {
+                iae.printStackTrace();
+            }
+        }
     }
 }

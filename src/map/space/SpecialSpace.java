@@ -33,6 +33,16 @@ public abstract class SpecialSpace implements Space {
         return isSafeForMonster(creature) && isSafeForHero(creature);
     }
 
+    @Override
+    public boolean hasOpponent(Creature creature) {
+        if (creature instanceof Hero && monster != null){
+            return true;
+        } else if (creature instanceof Monster && hero != null){
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Display creature on space or empty String
      * @see Space
@@ -75,7 +85,8 @@ public abstract class SpecialSpace implements Space {
 
     @Override
     public void vacant(Creature creature) {
-        if (this.hero.equals(creature) || this.monster.equals(creature)){
+        if ((this.hero != null && this.hero.equals(creature))
+                || (this.monster != null && this.monster.equals(creature))){
             removeBonus(creature);
             creatureExit(creature);
         }

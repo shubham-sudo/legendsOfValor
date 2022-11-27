@@ -1,6 +1,7 @@
 package creature;
 
 import inventory.*;
+import map.Position;
 import product.*;
 import wallet.Wallet;
 

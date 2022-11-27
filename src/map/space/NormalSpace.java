@@ -34,6 +34,16 @@ public abstract class NormalSpace implements Space{
         return isSafeForMonster(creature) && isSafeForHero(creature);
     }
 
+    @Override
+    public boolean hasOpponent(Creature creature) {
+        if (creature instanceof Hero && monster != null){
+            return true;
+        } else if (creature instanceof Monster && hero != null){
+            return true;
+        }
+        return false;
+    }
+
     private void creatureEnter(Creature creature){
         if (creature instanceof Monster){
             this.monster = creature;
@@ -71,8 +81,9 @@ public abstract class NormalSpace implements Space{
 
     @Override
     public void vacant(Creature creature) {
-        if (this.hero.equals(creature) || this.monster.equals(creature)){
-            this.creatureExit(creature);
+        if ((this.hero != null && this.hero.equals(creature))
+                || (this.monster != null && this.monster.equals(creature))){
+            creatureExit(creature);
         }
     }
 }

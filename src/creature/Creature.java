@@ -1,11 +1,22 @@
 package creature;
 
 
+import map.Position;
+
 /**
  * Interface for defining several function for every type of creature
  */
 public interface Creature {
+    int getHomeLane();
+
+    void setHomeLane(int laneNumber);
+
+    public Position getCurrentPosition();
+
+    public void setCurrentPosition(int laneNumber, int row, int col);
+
     void setId(int id);   // TODO (shubham) this is temporary function .. fix the createCreature before remove
+
     void decreaseAgility(double agility);
 
     void decreaseDamage(double damage);

@@ -5,15 +5,15 @@ import creature.Creature;
 public class Move {
     public final GameMove gameMove;
     public final Creature creature;
-    public final int laneNumber;
-    public final int rowNumber;
-    public final int colNumber;
+    public int laneNumber;
+    public int rowNumber;
+    public int colNumber;
 
-    public Move(Creature creature, int lane, int row, int col, GameMove gameMove){
+    public Move(Creature creature, int laneNumber, GameMove gameMove){
         this.creature = creature;
-        this.laneNumber = lane;
-        this.rowNumber = row;
-        this.colNumber = col;
+        this.laneNumber = laneNumber;
+        this.rowNumber = -1;
+        this.colNumber = -1;
         this.gameMove = gameMove;
     }
 }

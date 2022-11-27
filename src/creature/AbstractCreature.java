@@ -1,6 +1,8 @@
 package creature;
 
 
+import map.Position;
+
 /**
  * Abstract class for all type of creatures with also implements Creature interface for basic operations
  */
@@ -11,6 +13,8 @@ public abstract class AbstractCreature implements Creature {
     protected double strength;
     protected double agility;
     private boolean alive;
+    private int homeLane;
+    private final Position currentPosition;
 
     /**
      * Creates and object of AbstractCreature class
@@ -24,6 +28,29 @@ public abstract class AbstractCreature implements Creature {
         this.baseHealth = baseHealth;
         this.strength = strength;
         this.agility = agility;
+        this.currentPosition = new Position();
+    }
+
+    @Override
+    public int getHomeLane(){
+        return this.homeLane;
+    }
+
+    @Override
+    public void setHomeLane(int laneNumber){
+        this.homeLane = laneNumber;
+    }
+
+    @Override
+    public Position getCurrentPosition(){
+        return this.currentPosition != null ? this.currentPosition : null;
+    }
+
+    @Override
+    public void setCurrentPosition(int laneNumber, int row, int col){
+        this.currentPosition.laneNumber = laneNumber;
+        this.currentPosition.rowNumber = row;
+        this.currentPosition.colNumber = col;
     }
 
     @Override
