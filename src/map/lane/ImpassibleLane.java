@@ -9,10 +9,11 @@ import map.space.InaccessibleSpace;
  * for an upgraded creature.
  */
 public class ImpassibleLane extends Lane {
+    public static final int DEFAULT_WIDTH = 1;
 
     public ImpassibleLane(int length){
         super(length);
-        this.width = 1;
+        this.width = DEFAULT_WIDTH;
         this.spaces = new InaccessibleSpace[getLength()][width];
     }
 

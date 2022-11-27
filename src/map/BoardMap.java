@@ -2,6 +2,7 @@ package map;
 
 import creature.*;
 import map.lane.*;
+import map.space.Space;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -35,6 +36,27 @@ public class BoardMap {
 
     public int getLaneSize() {
         return laneSize;
+    }
+
+    public String[] getLaneLabels(){
+        String[] strings = new String[getNumberOfLanes()];
+        int laneNumber = 1;
+        for (int i = 0; i < getNumberOfLanes(); i++){
+            if (i % 2 == 0){
+                // Passable lane
+                char[] label = new String(new char[Space.EMPTY_SPACE.length() * PassableLane.DEFAULT_WIDTH]).replace("\0", " ").toCharArray();
+                int start = label.length / 2;
+                label[start-1] = 'L';
+                label[start] = '-';
+                label[start+1] = (char) (laneNumber + '0');
+                strings[i] = String.valueOf(label);
+                laneNumber++;
+            } else {
+                // Impassable Lane
+                strings[i] = Space.EMPTY_SPACE;
+            }
+        }
+        return strings;
     }
 
     public void sendHeroesOnMap(ArrayList<Creature> creatures) throws IllegalAccessException {

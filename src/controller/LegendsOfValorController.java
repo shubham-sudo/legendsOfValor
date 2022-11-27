@@ -1,14 +1,16 @@
 package controller;
 
-import creature.Creature;
+import creature.*;
 import factory.CreaturesFactory;
 import game.LegendsOfValor;
 import map.BoardMap;
 import map.lane.Lane;
 import map.space.Space;
+import move.GameMove;
 import player.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class LegendsOfValorController implements GameController {
@@ -21,6 +23,10 @@ public class LegendsOfValorController implements GameController {
         creaturesFactory = new CreaturesFactory();
     }
 
+    /**
+     * Add Heroes to the player
+     * @param player player whose playing
+     */
     private void addHeroes(Player player){
         for (int i = 0; i < numberOfLanes; i++){
             int num;
@@ -35,18 +41,26 @@ public class LegendsOfValorController implements GameController {
                     continue;
                 }
 
+                Creature creature;
+
                 switch (num){
                     case 1:
                         displayCreatures(this.creaturesFactory.getPaladins());
-                        player.addCreature(getCreature(this.creaturesFactory.getPaladins()));
+                        creature = getCreature(this.creaturesFactory.getPaladins()); // TODO: (shubham) remove this once factory is fixed
+                        creature.setId(i+1);
+                        player.addCreature(creature);
                         break;
                     case 2:
                         displayCreatures(this.creaturesFactory.getSorcerers());
-                        player.addCreature(getCreature(this.creaturesFactory.getSorcerers()));
+                        creature = getCreature(this.creaturesFactory.getSorcerers()); // TODO: (shubham) remove this once factory is fixed
+                        creature.setId(i+1);
+                        player.addCreature(creature);
                         break;
                     case 3:
                         displayCreatures(this.creaturesFactory.getWarriors());
-                        player.addCreature(getCreature(this.creaturesFactory.getSorcerers()));
+                        creature = getCreature(this.creaturesFactory.getWarriors()); // TODO: (shubham) remove this once factory is fixed
+                        creature.setId(i+1);
+                        player.addCreature(creature);
                         break;
                     default:
                         break;
@@ -109,17 +123,28 @@ public class LegendsOfValorController implements GameController {
      */
     private void displayMap(){
         Lane[] lanes = game.getMap().map();
+        HashMap<String, String> spaceRepresentations = new HashMap<>();
 
         for (int i = 0; i < game.getMap().getLaneSize(); i++){
             for (int j = 0; j < game.getMap().getNumberOfLanes(); j++){
                 Lane lane = lanes[j];
                 for (int k = 0; k < lane.getWidth(); k++){
                     Space space = lane.getSpace(i, k);  // TODO: (shubham) think if we can have border for every space
+                    if (!spaceRepresentations.containsKey(space.getClass().getSimpleName())){
+                        spaceRepresentations.put(space.getClass().getSimpleName(), space.bgColor());
+                    }
                     System.out.print(space.bgColor() + space.displayValue() + Space.ANSI_RESET);
                 }
             }
             System.out.println();
         }
+        System.out.println(String.join("", game.getMap().getLaneLabels()));
+        System.out.println("\nBoard colors represents the respective spaces");
+        for (String str : spaceRepresentations.keySet()){
+            System.out.print(spaceRepresentations.get(str) + "   " + Space.ANSI_RESET);
+            System.out.println("\t\t" + str);
+        }
+
     }
 
     private void displayCreatures(ArrayList<? extends Creature> creatures){
@@ -139,6 +164,52 @@ public class LegendsOfValorController implements GameController {
         System.out.println();
     }
 
+    private GameMove getMove(Creature creature){
+        System.out.println();
+        System.out.println("Possible Moves [u]UP, [d]DOWN, [r]RIGHT, [l]LEFT, [m]MARKET, [a]ATTACK, [c]CAST, [p]POTION, [e]EQUIP, [i]INFO, [b]RECALL, [t]TELEPORT");
+        System.out.println("Enter move for " + creature.displayValue());
+        GameMove move;
+
+        while (true) {
+            try {
+                move = GameMove.vOf(getCharFromUser());
+                break;
+            } catch (IllegalArgumentException iae) {
+                System.out.println(iae.getMessage());
+            }
+        }
+        return move;
+    }
+
+    private void driveGame(){
+        // TODO: (shubham) while next turn ...
+        //  iterate over creatures
+        //  after every move check if the game can be played more or someone wins.
+        System.out.println("######## Game Started ########");
+        while (game.notOver()){
+            Player player = game.nextTurn();
+
+            // one round
+            for (Creature creature : player){
+                if (creature instanceof Hero){
+                    GameMove move = getMove(creature);
+
+                    // TODO: (shubham) if hero ask the user for move should force to attack
+                    //     if monster is near to the next move
+                    //  if hero ask for market .. check for the exact space and enter him to market
+                    //  UP, DOWN, RIGHT, LEFT, MARKET, ATTACK, CAST, POTION, EQUIP, INFO
+                } else {
+                    System.out.println("Monster " + creature.displayValue() + " playing his move");
+                    // TODO: (shubham) if monster get automatic move should be biased to attack
+                    //      if hero is near to the next move
+                }
+                displayMap();
+            }
+
+            // TODO: (shubham) check if any hero or monster died and revive them and place at home
+        }
+    }
+
     @Override
     public void run() {
         boardSize();
@@ -150,5 +221,6 @@ public class LegendsOfValorController implements GameController {
             iae.printStackTrace();
         }
         displayMap();
+        driveGame();
     }
 }

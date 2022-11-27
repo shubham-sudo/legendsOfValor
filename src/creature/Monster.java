@@ -20,6 +20,10 @@ public class Monster extends AbstractCreature {
     }
 
     @Override
+    public void setId(int id) {  // TODO: (shubham) remove this once createCreature factory is fixed
+    }
+
+    @Override
     public void decreaseDamage(double damage) {
         decreaseStrength(damage);
     }

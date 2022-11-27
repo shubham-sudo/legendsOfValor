@@ -11,7 +11,7 @@ import java.util.*;
  */
 public abstract class Hero extends AbstractCreature {
     private static int ID = 0;  // TODO: (shubham) think if we can place a icon, instead of 'H'
-    private final int id;
+    private int id;   // TODO: (shubham) this should be final, fix the createCreature factory
     private final double baseMana;
     private final Wallet wallet;
     private final Inventory inventory;
@@ -43,6 +43,11 @@ public abstract class Hero extends AbstractCreature {
         this.wallet = new Wallet();
         this.inventory = new CreatureInventory();
         this.inHandWeapons = new ArrayList<>();
+    }
+
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

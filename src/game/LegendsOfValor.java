@@ -4,6 +4,7 @@ import creature.Creature;
 import factory.*;
 import factory.MapFactory;
 import map.BoardMap;
+import move.Move;
 import player.Player;
 
 public class LegendsOfValor extends Game{
@@ -11,8 +12,10 @@ public class LegendsOfValor extends Game{
     private static final CreaturesFactory creaturesFactory = new CreaturesFactory();
     private BoardMap map;
     private int maxLevel;
+    private boolean over;
 
     public LegendsOfValor(){
+        over = false;
     }
 
     public BoardMap getMap() {
@@ -20,6 +23,10 @@ public class LegendsOfValor extends Game{
             initializeBoard();
         }
         return map;
+    }
+
+    public boolean notOver(){
+        return !over;
     }
 
     public void initializeBoard(){
@@ -55,5 +62,9 @@ public class LegendsOfValor extends Game{
 
         this.map.sendMonstersOnMap(monsterPlayer.getCreatures());
         players.add(monsterPlayer);
+    }
+
+    public void playMove(Move move){
+
     }
 }

@@ -5,6 +5,7 @@ package creature;
  * Interface for defining several function for every type of creature
  */
 public interface Creature {
+    void setId(int id);   // TODO (shubham) this is temporary function .. fix the createCreature before remove
     void decreaseAgility(double agility);
 
     void decreaseDamage(double damage);
