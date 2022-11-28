@@ -37,6 +37,11 @@ public abstract class Spell extends Product implements SpellEffects, Consumable 
     }
 
     /**
+     * Get affected attribute of Creature
+     */
+    public abstract String affectedAttribute();
+
+    /**
      * Getter for the damage value of the spell
      * @return float value
      */
@@ -64,6 +69,7 @@ public abstract class Spell extends Product implements SpellEffects, Consumable 
         if (isSafeToConsume(hero)){
             hero.decreaseMana(this.requiredMana);
             this.consumed = true;
+            hero.inventory().removeProduct(this);
             return true;
         }
         return false;

@@ -9,7 +9,17 @@ import map.Position;
 public interface Creature {
     int getHomeLane();
 
+    String getName();
+
     void setHomeLane(int laneNumber);
+
+    double getDodgeChance();
+
+    double getDamage();
+
+    double getDefence();
+
+    double getDexterity();
 
     public Position getCurrentPosition();
 

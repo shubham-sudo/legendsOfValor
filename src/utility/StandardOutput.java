@@ -1,5 +1,6 @@
 package utility;
 
+import creature.Creature;
 import creature.CreatureAttributes;
 import product.*;
 
@@ -16,7 +17,7 @@ public class StandardOutput {
     };
     private static final int columnLength = 22;
 
-    public static void showArmorProducts(List<Product> armors) {
+    public static void showArmorProducts(List<? extends Product> armors) {
         String[] armorHeader = new String[]{
                 "Damage Reduction"
         };
@@ -41,7 +42,7 @@ public class StandardOutput {
         }
     }
 
-    public static void showSpellProducts(List<Product> spells) {
+    public static void showSpellProducts(List<? extends Product> spells) {
         String[] spellHeader = new String[]{
                 "Damage Value",
                 "Required Mana"
@@ -68,7 +69,7 @@ public class StandardOutput {
         }
     }
 
-    public static void showWeaponProducts(List<Product> weapons) {
+    public static void showWeaponProducts(List<? extends Product> weapons) {
         String[] weaponHeader = new String[]{
                 "Damage",
                 "Required Hands"
@@ -95,7 +96,7 @@ public class StandardOutput {
         }
     }
 
-    public static void showPotionProducts(List<Product> potions) {
+    public static void showPotionProducts(List<? extends Product> potions) {
         String[] potionHeader = new String[]{
                 "Healing Value",
                 "Attributes Affected"
@@ -120,5 +121,10 @@ public class StandardOutput {
 
             System.out.println(Utility.getPaddedString(details, columnLength));
         }
+    }
+
+    public static void showCreature(Creature creature){
+        System.out.println();
+        System.out.println(creature);
     }
 }

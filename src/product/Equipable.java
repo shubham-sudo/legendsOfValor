@@ -25,5 +25,5 @@ public interface Equipable {
      * Remove the product if needed
      * @param hero creature who want to remove
      */
-    void drop(Hero hero);
+    void drop(Hero hero) throws IllegalAccessException;
 }

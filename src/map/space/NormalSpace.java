@@ -35,6 +35,16 @@ public abstract class NormalSpace implements Space{
     }
 
     @Override
+    public Creature getOpponent(Creature creature) {
+        if (creature instanceof Hero && monster != null){
+            return monster;
+        } else if (creature instanceof Monster && hero != null){
+            return hero;
+        }
+        return null;
+    }
+
+    @Override
     public boolean hasOpponent(Creature creature) {
         if (creature instanceof Hero && monster != null){
             return true;

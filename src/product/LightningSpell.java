@@ -8,6 +8,7 @@ import creature.*;
  */
 
 public class LightningSpell extends Spell{
+    private static final String affectedAttribute = "Agility";
 
     /**
      * Creates the new Lightning spell
@@ -22,13 +23,18 @@ public class LightningSpell extends Spell{
         super(name, level, price, description, damageValue, requiredMana);
     }
 
+    @Override
+    public String affectedAttribute() {
+        return affectedAttribute;
+    }
+
     /**
      * Apply lightning spell effects on the opponent
-     * @see Spell#applySpellEffects(Creature)
+     * @see Spell#applySpellEffects(Creature, Creature)
      * @param creature creature to hit spell on
      */
     @Override
-    public void applySpellEffects(Creature creature) {
-        creature.decreaseAgility(this.getDamageValue());
+    public void applySpellEffects(Creature creature, Creature opponent) {
+        creature.decreaseAgility(getSpellDamage(this.getDamageValue(), creature.getDexterity()));
     }
 }

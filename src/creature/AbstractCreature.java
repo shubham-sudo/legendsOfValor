@@ -42,6 +42,16 @@ public abstract class AbstractCreature implements Creature {
     }
 
     @Override
+    public double getDodgeChance() {
+        return this.agility;
+    }
+
+    @Override
+    public double getDexterity(){
+        return 0;
+    }
+
+    @Override
     public Position getCurrentPosition(){
         return this.currentPosition != null ? this.currentPosition : null;
     }
@@ -64,6 +74,9 @@ public abstract class AbstractCreature implements Creature {
     @Override
     public void decreaseHealth(double health) {
         this.baseHealth = Math.max((this.baseHealth - health), 0);
+        if (this.baseHealth <= 0){
+            setDead();
+        }
     }
 
     @Override

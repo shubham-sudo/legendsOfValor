@@ -22,7 +22,7 @@ public class FortressSpace extends NormalSpace {
     public void occupy(Creature creature) throws IllegalAccessException {
         super.occupy(creature);
         if (creature instanceof Monster){
-            GameWinPublisher.getWinPublisherInstance().notifyObservers(creature, this);
+            GameWinPublisher.getWinPublisherInstance().notifyObservers(creature, null,this);
         }
     }
 }

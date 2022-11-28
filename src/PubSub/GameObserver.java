@@ -12,5 +12,5 @@ public interface GameObserver {
      * Notifying the observers with below attributes
      * @param creature hero object itself
      */
-    void notifying(Creature creature, Space space);
+    void notifying(Creature creature, Creature opponent, Space space);
 }

@@ -22,6 +22,11 @@ public abstract class Inventory {
         this.productCountMap = new HashMap<>();
     }
 
+    public Inventory(ArrayList<Product> products) {
+        this();
+        addProducts(products);
+    }
+
     /**
      * added new product into the inventory
      * @param product product
@@ -40,10 +45,34 @@ public abstract class Inventory {
      * add a list of products into the inventory
      * @param products List of products
      */
-    public void addProducts(List<Product> products){
+    public void addProducts(List<? extends Product> products){
         for (Product product : products){
             addProduct(product);
         }
+    }
+
+    /**
+     * Has castable products in Inventory of Creature
+     */
+    public boolean hasCastable() {
+        List<Product> products = this.products.values().stream().filter(product -> product instanceof Spell).collect(Collectors.toList());
+        return products.size() > 0;
+    }
+
+    /**
+     * Has healable products in Inventory of Creature
+     */
+    public boolean hasHealer() {
+        List<Product> products = this.products.values().stream().filter(product -> product instanceof Potion).collect(Collectors.toList());
+        return products.size() > 0;
+    }
+
+    /**
+     * Has equipable products in Inventory of Creature
+     */
+    public boolean hasEquipable() {
+        List<Product> products = this.products.values().stream().filter(product -> (product instanceof Equipable)).collect(Collectors.toList());
+        return products.size() > 0;
     }
 
     /**

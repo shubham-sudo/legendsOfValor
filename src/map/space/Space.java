@@ -20,6 +20,13 @@ public interface Space {
     boolean hasOpponent(Creature creature);
 
     /**
+     * Get the opponent creature nearby
+     * @param creature creature object to check opponent
+     * @return opponent Creature
+     */
+    Creature getOpponent(Creature creature);
+
+    /**
      * Return the background color for this particular space
      * @return String
      */

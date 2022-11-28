@@ -8,6 +8,7 @@ import creature.*;
  */
 
 public class IceSpell extends Spell{
+    private static final String affectedAttribute = "Damage";
 
     /**
      * Creates the new Ice spell
@@ -22,13 +23,18 @@ public class IceSpell extends Spell{
         super(name, level, price, description, damageValue, requiredMana);
     }
 
+    @Override
+    public String affectedAttribute() {
+        return affectedAttribute;
+    }
+
     /**
      * Apply ice spell effects on the opponent
-     * @see Spell#applySpellEffects(Creature)
+     * @see Spell#applySpellEffects(Creature, Creature)
      * @param creature creature to hit spell on
      */
     @Override
-    public void applySpellEffects(Creature creature) {
-        creature.decreaseDamage(this.getDamageValue());
+    public void applySpellEffects(Creature creature, Creature opponent) {
+        creature.decreaseDamage(getSpellDamage(this.getDamageValue(), creature.getDexterity()));
     }
 }

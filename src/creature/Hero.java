@@ -46,6 +46,26 @@ public abstract class Hero extends AbstractCreature {
         this.inHandWeapons = new ArrayList<>();
     }
 
+    public ArrayList<Weapon> getInHandWeapons() {
+        return inHandWeapons;
+    }
+
+
+    @Override
+    public double getDamage() {
+        return this.strength;
+    }
+
+    @Override
+    public double getDefence() {
+        return this.defence;
+    }
+
+    @Override
+    public double getDexterity(){
+        return this.dexterity;
+    }
+
     @Override
     public void setId(int id) {
         this.id = id;
@@ -83,9 +103,12 @@ public abstract class Hero extends AbstractCreature {
     /**
      * Remove armor may be you want to replace with another
      */
-    public void dropArmor(Armor armor){
+    public void dropArmor(Armor armor) throws IllegalAccessException{
         if (this.armor == armor){
             this.armor = null;
+            this.inventory.addProduct(armor);
+        } else {
+            throw new IllegalAccessException("Illegal armor, Not in Use");
         }
     }
 
@@ -93,10 +116,13 @@ public abstract class Hero extends AbstractCreature {
      * drop weapon may be you want to replace
      * @param weapon product
      */
-    public void dropWeapon(Weapon weapon){
+    public void dropWeapon(Weapon weapon) throws IllegalAccessException{
         if (inHandWeapons.contains(weapon)){
             inHandWeapons.remove(weapon);
             this.hands += weapon.getRequiredHands();
+            this.inventory.addProduct(weapon);
+        } else {
+            throw new IllegalAccessException("Illegal weapon, Not in Hand");
         }
     }
 
@@ -106,6 +132,7 @@ public abstract class Hero extends AbstractCreature {
      */
     public void equipArmor(Armor armor){
         this.armor = armor;
+        this.inventory.removeProduct(armor);
     }
 
     /**
@@ -113,11 +140,13 @@ public abstract class Hero extends AbstractCreature {
      * @param weapon product
      */
     public void equipWeapon(Weapon weapon) throws IllegalAccessException{
-        if (this.getFreeHands() > weapon.getRequiredHands()){
+        if (this.getFreeHands() >= weapon.getRequiredHands()){
             inHandWeapons.add(weapon);
             this.hands -= weapon.getRequiredHands();
+            this.inventory.removeProduct(weapon);
+        } else {
+            throw new IllegalAccessException("No Free Hands!");
         }
-        throw new IllegalAccessException("No Free Hands!");
     }
 
     /**
@@ -225,7 +254,8 @@ public abstract class Hero extends AbstractCreature {
     @Override
     protected void levelUp(){
         super.levelUp();
-        this.mana += this.mana * 1.1;
+        this.health = this.baseHealth;
+        this.mana *= 1.1;
         levelUpFavouredSkills();
     }
 
@@ -235,6 +265,11 @@ public abstract class Hero extends AbstractCreature {
         super.revive();
         this.health = this.baseHealth * 0.5;
         this.mana = this.baseMana * 0.5;
+    }
+
+    public  void regain(){
+        this.health *= 1.1;
+        this.mana *= 1.1;
     }
 
     @Override

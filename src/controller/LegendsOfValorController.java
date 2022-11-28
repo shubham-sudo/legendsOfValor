@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+
 public class LegendsOfValorController implements GameController {
     private final LegendsOfValor game;
     private Player playerTurn;
@@ -132,6 +133,7 @@ public class LegendsOfValorController implements GameController {
         Lane[] lanes = game.getMap().map();
         HashMap<String, String> spaceRepresentations = new HashMap<>();
 
+        System.out.println();
         for (int i = 0; i < game.getMap().getLaneSize(); i++){
             System.out.print(i+1 + "\t");
             for (int j = 0; j < game.getMap().getNumberOfLanes(); j++){
@@ -176,7 +178,7 @@ public class LegendsOfValorController implements GameController {
 
     private GameMove getGameMove(Creature creature){
         System.out.println();
-        System.out.println("Possible Moves [u]UP, [d]DOWN, [r]RIGHT, [l]LEFT, [m]MARKET, [a]ATTACK, [c]CAST, [p]POTION, [e]EQUIP, [i]INFO, [b]RECALL, [t]TELEPORT");
+        System.out.println("Possible Moves [u]UP, [d]DOWN, [r]RIGHT, [l]LEFT, [m]MARKET, [q]EXIT, \n[a]ATTACK, [c]CAST, [p]POTION, [e]EQUIP, [i]INFO, [b]RECALL, [t]TELEPORT");
         System.out.println("Enter move for " + creature.displayValue());
         GameMove move;
 
@@ -239,6 +241,7 @@ public class LegendsOfValorController implements GameController {
             case ATTACK:
             case CAST:
             case EQUIP:
+            case DROP:
             case POTION:
             case MARKET:
             case INFO:
@@ -249,16 +252,39 @@ public class LegendsOfValorController implements GameController {
 
     private void humanReadableMessage(Move move){
         System.out.println("Invalid Move, Try again!!!");
-        if (move.gameMove == GameMove.RECALL){
-            System.out.println("The Space is already Occupied, Please move the creature first!");
-        } else if (move.gameMove == GameMove.TELEPORT) {
-            System.out.println("Teleport is only possible at lane rows already explored!");
-        } else if (move.gameMove == GameMove.LEFT || move.gameMove == GameMove.RIGHT) {
-            System.out.println("Cannot move on the Inaccessible space!");
-        } else if (move.gameMove == GameMove.UP || move.gameMove == GameMove.DOWN) {
-            System.out.println("Cannot move UP/DOWN when another creature near by!");
-        } else if (move.gameMove == GameMove.MARKET) {
-            System.out.println("You should be on your Nexus to access the market!");
+        switch (move.gameMove) {
+            case RECALL:
+                System.out.println("The Space is already Occupied, Please move the creature first!");
+                break;
+            case TELEPORT:
+                System.out.println("Teleport is only possible at lane rows already explored!");
+                break;
+            case LEFT:
+            case RIGHT:
+                System.out.println("Cannot move on the Inaccessible space!");
+                break;
+            case UP:
+            case DOWN:
+                System.out.println("Cannot move UP/DOWN when another creature near by!");
+                break;
+            case ATTACK:
+                System.out.println("Opponent is far away, Save you moves!");
+                break;
+            case CAST:
+                System.out.println("You don't have any castable in your inventory OR");
+                System.out.println("Opponent is far away, Save your products!");
+                break;
+            case EQUIP:
+                System.out.println("You don't have any equipable product in your inventory");
+                break;
+            case DROP:
+                System.out.println("You haven't equipped anything yet!");
+            case POTION:
+                System.out.println("You don't have any healable product in your inventory");
+                break;
+            case MARKET:
+                System.out.println("You should be on your Nexus to access the market!");
+                break;
         }
     }
 
@@ -295,14 +321,22 @@ public class LegendsOfValorController implements GameController {
             // TODO: (shubham) check if any hero or monster died and revive them and place at home
             //  check if anyone won the game after getting out of the while loop
             //  spawn monster after every 8 rounds plus after every battle check if any creature dies .. revive them
-            //
-
-            // PUT A FLAG TO CHECK IF MONSTER POSITION IS DOWN THAN HERO
         }
+        System.out.println("\n######## Congratulations!!!, " + playerTurn.getName() + " Won this Game ########");
+    }
+
+    private void overview(){
+        System.out.println(
+                "\t\t\t\tLegends of Valor isa MOBA (multiplayer online battle arena)-likegame. \n" +
+                "\t\t\t\tThe player will control a team of 3 heroes who will attempt to fight their way \n" +
+                "\t\t\t\tthrough to the monsters’ Nexus.The heroes win if any of them reach the monsters’ Nexus. \n" +
+                "\t\t\t\tThe heroes loseif any monster reaches the heroes’ Nexus.\n"
+        );
     }
 
     @Override
     public void run() {
+        overview();
         boardSize();
         game.initializeBoard(numberOfLanes, Lane.DEFAULT_LENGTH);
         try {

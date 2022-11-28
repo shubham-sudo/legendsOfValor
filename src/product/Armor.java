@@ -58,7 +58,7 @@ public class Armor extends Product implements Equipable{
      * @param hero creature who want to remove
      */
     @Override
-    public void drop(Hero hero) {
+    public void drop(Hero hero) throws IllegalAccessException {
         hero.dropArmor(this);
     }
 }

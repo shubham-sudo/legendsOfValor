@@ -13,7 +13,7 @@ public class GameWinObserver implements GameObserver{
     }
 
     @Override
-    public void notifying(Creature creature, Space space) {
+    public void notifying(Creature creature, Creature opponent, Space space) {
         updateGameWinFlag(creature, space);
     }
 }

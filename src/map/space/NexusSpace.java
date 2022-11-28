@@ -25,7 +25,7 @@ public class NexusSpace extends NormalSpace{
     public void occupy(Creature creature) throws IllegalAccessException {
         super.occupy(creature);
         if (creature instanceof Hero){
-            GameWinPublisher.getWinPublisherInstance().notifyObservers(creature, this);
+            GameWinPublisher.getWinPublisherInstance().notifyObservers(creature, null, this);
         }
     }
 }

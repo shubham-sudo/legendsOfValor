@@ -44,6 +44,37 @@ public abstract class Lane {
         return id;
     }
 
+    public Creature getOpponentNearBy(Creature creature) {
+        Creature opponent = null;
+        int row = creature.getCurrentPosition().rowNumber;
+        int col = creature.getCurrentPosition().colNumber;
+
+        int[][] nearByIndex = new int[][]{
+                {-1, -1},
+                {-1, 0},
+                {-1, +1},
+                {0, -1},
+                {0, 0},
+                {0, +1},
+                {+1, -1},
+                {+1, 0},
+                {+1, +1},
+        };
+
+        for (int[] byIndex : nearByIndex) {
+            Space space;
+            try {
+                space = getSpace(row + byIndex[0], col + byIndex[1]);
+            } catch (NoSuchElementException ne) {
+                continue;
+            }
+            if (space.hasOpponent(creature)) {
+                opponent = space.getOpponent(creature);
+            }
+        }
+        return opponent;
+    }
+
     public Space getSpace(int row, int col) throws NoSuchElementException {
         if (row > -1 && row < this.length && col > -1 && col < this.width){
             return this.spaces[row][col];

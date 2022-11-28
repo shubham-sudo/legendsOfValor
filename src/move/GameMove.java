@@ -11,9 +11,11 @@ public enum GameMove {
     CAST('c'),
     POTION('p'),
     EQUIP('e'),
+    DROP('w'),
     INFO('i'),
     RECALL('b'),
-    TELEPORT('t');
+    TELEPORT('t'),
+    EXIT('q');
 
     private final char move;
     GameMove(char move){

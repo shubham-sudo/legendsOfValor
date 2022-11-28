@@ -5,17 +5,17 @@ import map.space.Space;
 
 import java.util.ArrayList;
 
-public class GameWinPublisher implements GamePublisher{
+public class BattleOneRoundPublisher implements GamePublisher{
     private final ArrayList<GameObserver> gameObservers;
     private static GamePublisher gamePublisher;
 
-    private GameWinPublisher() {
+    private BattleOneRoundPublisher(){
         this.gameObservers = new ArrayList<>();
     }
 
-    public static GamePublisher getWinPublisherInstance(){
-        if (gamePublisher == null){
-            gamePublisher = new GameWinPublisher();
+    public static GamePublisher getBattleOneRoundPublisherInstance() {
+        if (gamePublisher == null) {
+            gamePublisher = new BattleOneRoundPublisher();
         }
         return gamePublisher;
     }
@@ -27,7 +27,7 @@ public class GameWinPublisher implements GamePublisher{
 
     @Override
     public void notifyObservers(Creature creature, Creature opponent, Space space) {
-        for (GameObserver gameObserver : this.gameObservers){
+        for (GameObserver gameObserver : this.gameObservers) {
             gameObserver.notifying(creature, opponent, space);
         }
     }

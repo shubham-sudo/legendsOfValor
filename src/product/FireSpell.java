@@ -7,6 +7,7 @@ import creature.*;
  * Fire spell is a Spell which reduce the defence of the opponent
  */
 public class FireSpell extends Spell{
+    private static final String affectedAttribute = "Defence";
 
     /**
      * Creates the new Fire spell
@@ -21,13 +22,18 @@ public class FireSpell extends Spell{
         super(name, level, price, description, damageValue, requiredMana);
     }
 
+    @Override
+    public String affectedAttribute() {
+        return affectedAttribute;
+    }
+
     /**
      * Apply fire spell effects on the opponent
-     * @see Spell#applySpellEffects(Creature)
+     * @see Spell#applySpellEffects(Creature, Creature)
      * @param creature creature to hit spell on
      */
     @Override
-    public void applySpellEffects(Creature creature) {
-        creature.decreaseDefence(this.getDamageValue());
+    public void applySpellEffects(Creature creature, Creature opponent) {
+        creature.decreaseDefence(getSpellDamage(this.getDamageValue(), creature.getDexterity()));
     }
 }

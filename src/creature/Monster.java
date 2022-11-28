@@ -38,16 +38,15 @@ public class Monster extends AbstractCreature {
         return "M"+id;
     }
 
+
+    @Override
     public double getDamage() {
         return strength;
     }
 
+    @Override
     public double getDefence() {
         return defence;
-    }
-
-    public double getDodge() {
-        return agility;
     }
 
     @Override

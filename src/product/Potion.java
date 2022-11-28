@@ -66,6 +66,7 @@ public class Potion extends  Product implements Consumable{
         if (!isSafeToConsume(hero)){
             hero.usePotion(this);
             this.consumed = true;
+            hero.inventory().removeProduct(this);
             return true;
         }
         return false;

@@ -2,7 +2,6 @@ package controller;
 
 import creature.Hero;
 import factory.MarketFactory;
-import inventory.Inventory;
 import market.Market;
 import move.MarketMove;
 import product.Product;
@@ -12,7 +11,7 @@ import product.ProductType;
 /**
  * Market is another small mini-game which implements GameController
 */
-public class MarketController implements GameController {
+public class MarketController implements GameController, ProductController {
     private static final double HERO_SELLING_FACTOR = 0.5;
     private final MarketFactory marketFactory;
     private Market market;
@@ -56,28 +55,6 @@ public class MarketController implements GameController {
     }
 
     /**
-     * get product type move of the hero for INFO move
-     * @return MarketMove given by hero
-     */
-    private ProductType getType(){
-        System.out.println();
-        System.out.println("Enter your type : [ARMOR/WEAPON/POTION/SPELL/ALL]");
-        ProductType productType;
-
-        while (true){
-            try {
-                productType = ProductType.valueOf(getStringFromUser().toUpperCase());
-            } catch (Exception e){
-                System.out.println("Invalid, Please enter a valid Type!");
-                System.out.println("Try again!");
-                continue;
-            }
-            break;
-        }
-        return productType;
-    }
-
-    /**
      * Check if Hero can buy this product
      * @param product product to buy
      * @return true if possible, false otherwise
@@ -103,30 +80,6 @@ public class MarketController implements GameController {
         }
         System.out.println("\n \t\t\t\t######## " + customer.getName() + " inventory updated!!! ########");
         customer.inventory().show(ProductType.valueOf(product.getClass().getSimpleName().toUpperCase()));
-    }
-
-    /**
-     * Get Product from Customer to BUY / SELL
-     * @return Product object or null
-     */
-    private Product getProduct(Inventory inventory){
-        System.out.println();
-        System.out.println("Enter the product_code ['q' to exit the operation]");
-        String productCode;
-
-        while (true) {
-            productCode = getStringFromUser();
-            if (productCode.equals("q")){
-                break;
-            } else if (!inventory.hasProduct(productCode)){
-                System.out.println("INVALID, Please enter a valid product code!");
-                System.out.println("Try again!");
-            } else {
-                break;
-            }
-        }
-
-        return inventory.getProduct(productCode);
     }
 
     /**
