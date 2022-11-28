@@ -1,10 +1,12 @@
 package map.lane;
 
 import creature.Creature;
+import creature.Hero;
 import map.Position;
 import map.space.Space;
+import move.Move;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.NoSuchElementException;
 
 
@@ -21,15 +23,12 @@ public abstract class Lane {
     private final int length;
     protected int width;
     protected Space[][] spaces;
-    protected HashMap<Creature, Position> creatures;
+    private final HashSet<Position> positions;
 
     public Lane(int length){
         this.id = ID++;
         this.length = length;
-        this.creatures = new HashMap<>();
-        // TODO: (shubham) maintain a list of all creatures in this lane and their current position
-        //  lane should give all the valid moves for a particular creature
-        //  this should also include all the teleport moves also.
+        positions = new HashSet<>();
     }
 
     public Lane(){
@@ -51,6 +50,19 @@ public abstract class Lane {
         throw new NoSuchElementException("Invalid index!");
     }
 
+    public boolean isSafeToTeleport(Creature creature, int laneNumber, int rowNumber, int colNumber){
+        if (laneNumber == creature.getCurrentPosition().laneNumber){
+            return false;
+        }
+        return positions.contains(new Position(laneNumber, rowNumber, colNumber));
+    }
+
+    private void addTeleportPositions(int row, int col){
+        for (int i = 0; i < spaces[row].length; i++){
+            positions.add(new Position(id, row, i));
+        }
+    }
+
     public boolean isOpponentNearBy(Creature creature, int row, int col){
         int[][] nearByIndex = new int[][]{
                 {-1, -1},
@@ -64,15 +76,14 @@ public abstract class Lane {
         };
         boolean opponentNearBy = false;
 
-        for (int i = 0; i < nearByIndex.length; i++){
+        for (int[] byIndex : nearByIndex) {
             Space space;
             try {
-                space = getSpace(row + nearByIndex[i][0], col + nearByIndex[i][1]);
-            } catch (NoSuchElementException nsee){
-//                nsee.printStackTrace();  // TODO: (shubham) remove this line
+                space = getSpace(row + byIndex[0], col + byIndex[1]);
+            } catch (NoSuchElementException ne) {
                 continue;
             }
-            if (space.hasOpponent(creature)){
+            if (space.hasOpponent(creature)) {
                 opponentNearBy = true;
             }
         }
@@ -94,6 +105,9 @@ public abstract class Lane {
         if (isSafeToOccupy(creature, spaceRow, spaceCol)) {
             getSpace(spaceRow, spaceCol).occupy(creature);
             creature.setCurrentPosition(id, spaceRow, spaceCol);
+            if (creature instanceof Hero) {
+                addTeleportPositions(spaceRow, spaceCol);
+            }
         } else {
             throw new IllegalAccessException("Invalid Move!");
         }

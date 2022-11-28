@@ -66,7 +66,7 @@ public class LegendsOfValor extends Game{
     }
 
     public boolean isSafeMove(Move move){
-        if (move.gameMove == GameMove.ATTACK || move.gameMove == GameMove.RECALL
+        if (move.gameMove == GameMove.ATTACK
             || move.gameMove == GameMove.INFO || move.gameMove == GameMove.MARKET) {
             return true;
         } else if (move.gameMove == GameMove.CAST || move.gameMove == GameMove.EQUIP

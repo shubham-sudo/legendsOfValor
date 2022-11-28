@@ -42,7 +42,7 @@ public class BoardMap {
 
     public String[] getLaneLabels(){
         String[] strings = new String[getNumberOfLanes()];
-        int laneNumber = 1;
+        int laneNumber = 0;
         for (int i = 0; i < getNumberOfLanes(); i++){
             if (i % 2 == 0){
                 // Passable lane
@@ -96,10 +96,13 @@ public class BoardMap {
     public boolean isSafeToOccupy(Move move){
         Lane lane = getLane(move.laneNumber);
         if ((move.gameMove == GameMove.UP || move.gameMove == GameMove.DOWN)
-                && !lane.isOpponentNearBy(move.creature, move.rowNumber, move.colNumber)){
+                && !lane.isOpponentNearBy(move.creature, move.rowNumber, move.colNumber)
+                && lane.isSafeToOccupy(move.creature, move.rowNumber, move.colNumber)){
             return true;
-        } else if (move.gameMove == GameMove.LEFT || move.gameMove == GameMove.RIGHT || move.gameMove == GameMove.TELEPORT){
+        } else if (move.gameMove == GameMove.LEFT || move.gameMove == GameMove.RIGHT){
             return lane.isSafeToOccupy(move.creature, move.rowNumber, move.colNumber);
+        } else if (move.gameMove == GameMove.TELEPORT){
+            return lane.isSafeToTeleport(move.creature, move.laneNumber, move.rowNumber, move.colNumber);
         }
         return false;
     }

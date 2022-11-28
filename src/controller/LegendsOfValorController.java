@@ -128,7 +128,9 @@ public class LegendsOfValorController implements GameController {
         HashMap<String, String> spaceRepresentations = new HashMap<>();
 
         for (int i = 0; i < game.getMap().getLaneSize(); i++){
+            System.out.print(i + "\t");
             for (int j = 0; j < game.getMap().getNumberOfLanes(); j++){
+
                 Lane lane = lanes[j];
                 for (int k = 0; k < lane.getWidth(); k++){
                     Space space = lane.getSpace(i, k);  // TODO: (shubham) think if we can have border for every space
@@ -140,6 +142,7 @@ public class LegendsOfValorController implements GameController {
             }
             System.out.println();
         }
+        System.out.print(" \t");
         System.out.println(String.join("", game.getMap().getLaneLabels()));
         System.out.println("\nBoard colors represents the respective spaces");
         for (String str : spaceRepresentations.keySet()){
@@ -217,7 +220,7 @@ public class LegendsOfValorController implements GameController {
                 break;
             case RECALL:
                 move.laneNumber = creature.getHomeLane();
-                move.rowNumber = 0;
+                move.rowNumber = game.getMap().getLaneSize()-1;
                 move.colNumber = 1;
                 // TODO (shubham): hard coded for time being, This will always goes to second col of lane
                 break;
@@ -234,11 +237,18 @@ public class LegendsOfValorController implements GameController {
             case POTION:
             case MARKET:
             case INFO:
-                move.laneNumber = position.laneNumber;
-                move.rowNumber = position.rowNumber;
-                move.colNumber = position.colNumber;
+                break;
         }
         return move;
+    }
+
+    private void humanReadableMessage(Move move){
+        System.out.println("Invalid Move, Try again!!!");
+        if (move.gameMove == GameMove.RECALL){
+            System.out.println("The Space is already Occupied, Please move the creature first!");
+        } else if (move.gameMove == GameMove.TELEPORT) {
+            System.out.println("Teleport is only possible at lane rows already explored!");
+        }
     }
 
     private void driveGame(){
@@ -259,7 +269,7 @@ public class LegendsOfValorController implements GameController {
                             game.playMove(move);
                             break;
                         }
-                        System.out.println("Invalid Move, Try again!!!");
+                        humanReadableMessage(move);
                     }
                 } else {
                     System.out.println("Monster " + creature.displayValue() + " playing his move");
