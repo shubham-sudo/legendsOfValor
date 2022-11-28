@@ -1,6 +1,8 @@
 package map.space;
 
+import PubSub.GameWinPublisher;
 import creature.Creature;
+import creature.Hero;
 
 
 /**
@@ -11,7 +13,7 @@ public class NexusSpace extends NormalSpace{
 
     @Override
     public boolean isSafeToOccupy(Creature creature) {
-        return (super.isSafeToOccupy(creature));  // TODO: add lane check here for which you also need to maintain the lane for every space
+        return (super.isSafeToOccupy(creature));
     }
 
     @Override
@@ -22,6 +24,8 @@ public class NexusSpace extends NormalSpace{
     @Override
     public void occupy(Creature creature) throws IllegalAccessException {
         super.occupy(creature);
-        // TODO:(shubham) end the game if creature is a Hero
+        if (creature instanceof Hero){
+            GameWinPublisher.getWinPublisherInstance().notifyObservers(creature, this);
+        }
     }
 }

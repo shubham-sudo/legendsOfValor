@@ -9,6 +9,9 @@ import java.util.*;
  */
 public abstract class Game {
     protected final Queue<Player> players;
+    protected boolean over;
+
+    public abstract void setOver();
 
     public Game(){
         players = new ArrayDeque<>();

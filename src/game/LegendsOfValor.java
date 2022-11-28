@@ -1,5 +1,7 @@
 package game;
 
+import PubSub.GameWinObserver;
+import PubSub.GameWinPublisher;
 import controller.MarketController;
 import creature.Creature;
 import creature.Hero;
@@ -12,15 +14,28 @@ import player.Player;
 import utility.Utility;
 
 public class LegendsOfValor extends Game{
+    private static LegendsOfValor legendsOfValor;
     private static final MapFactory mapFactory = new MapFactory();
     private static final CreaturesFactory creaturesFactory = new CreaturesFactory();
     private static final MarketController marketController = new MarketController();
     private BoardMap map;
     private int maxLevel;
-    private boolean over;
 
-    public LegendsOfValor(){
+    @Override
+    public void setOver() {
+        over = true;
+    }
+
+    private LegendsOfValor(){
         over = false;
+        GameWinPublisher.getWinPublisherInstance().register(new GameWinObserver());
+    }
+
+    public static LegendsOfValor getGameInstance() {
+        if (legendsOfValor == null) {
+            legendsOfValor = new LegendsOfValor();
+        }
+        return legendsOfValor;
     }
 
     public BoardMap getMap() {

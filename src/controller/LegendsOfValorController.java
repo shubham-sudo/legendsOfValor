@@ -1,5 +1,7 @@
 package controller;
 
+import PubSub.GameWinObserver;
+import PubSub.GameWinPublisher;
 import creature.*;
 import factory.CreaturesFactory;
 import game.LegendsOfValor;
@@ -17,12 +19,17 @@ import java.util.Iterator;
 
 public class LegendsOfValorController implements GameController {
     private final LegendsOfValor game;
+    private Player playerTurn;
     private final CreaturesFactory creaturesFactory;
     private int numberOfLanes = BoardMap.DEFAULT_LANES;
 
     public LegendsOfValorController(){
-        game = new LegendsOfValor();
+        game = LegendsOfValor.getGameInstance();
         creaturesFactory = new CreaturesFactory();
+    }
+
+    public Player getLastTurnPlayer() {
+        return this.playerTurn;
     }
 
     /**
@@ -258,15 +265,12 @@ public class LegendsOfValorController implements GameController {
     }
 
     private void driveGame(){
-        // TODO: (shubham) while next turn ...
-        //  iterate over creatures
-        //  after every move check if the game can be played more or someone wins.
         System.out.println("\n######## Game Started ########");
         while (game.notOver()){
-            Player player = game.nextTurn();
+            playerTurn = game.nextTurn();
 
             // one round
-            for (Creature creature : player){
+            for (Creature creature : playerTurn){
                 if (creature instanceof Hero){
                     while (true) {
                         GameMove gameMove = getGameMove(creature);
@@ -285,10 +289,14 @@ public class LegendsOfValorController implements GameController {
                     getEnter();
                 }
                 displayMap();
+                if (!game.notOver()) {
+                    break;
+                }
             }
 
             // TODO: (shubham) check if any hero or monster died and revive them and place at home
             //  check if anyone won the game after getting out of the while loop
+            //  spawn monster after every 8 rounds plus after every battle check if any creature dies .. revive them
         }
     }
 

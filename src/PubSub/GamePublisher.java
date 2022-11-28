@@ -1,7 +1,7 @@
 package PubSub;
 
-import creature.Hero;
-import inventory.Inventory;
+import creature.Creature;
+import map.space.Space;
 
 /**
  * An interface for all Game publishers
@@ -16,8 +16,7 @@ public interface GamePublisher {
 
     /**
      * notify observer when required
-     * @param inventory inventory object of hero
-     * @param hero hero object
+     * @param creature hero object
      */
-    void notifyObservers(Inventory inventory, Hero hero);
+    void notifyObservers(Creature creature, Space space);
 }

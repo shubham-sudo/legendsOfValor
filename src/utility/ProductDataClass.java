@@ -29,7 +29,7 @@ public class ProductDataClass{
 
         @Override
         public String toString() {
-            return ""+this.name+"\t"+this.cost+"\t"+this.requiredLevel+"\t"+this.impactValue+"\t"+CreatureAttributes.flatAttributesAffected(this.attributesAffected);
+            return ""+this.name+"\t"+this.cost+"\t"+this.requiredLevel+"\t"+this.impactValue+"\t"+CreatureAttributes.flatAttributes(this.attributesAffected);
         }
     }
 
@@ -106,19 +106,19 @@ public class ProductDataClass{
      * data holder for Potions
      */
     public static List<PotionProduct> potions(){
-        PotionProduct p1 = new PotionProduct("Healing_Potion", 250F, 1, 100F, EnumSet.of(CreatureAttributes.HP));
+        PotionProduct p1 = new PotionProduct("Healing_Potion", 250F, 1, 100F, EnumSet.of(CreatureAttributes.HEALTH));
         PotionProduct p2 = new PotionProduct("Strength_Potion", 200F, 1, 75F, EnumSet.of(CreatureAttributes.STRENGTH));
-        PotionProduct p3 = new PotionProduct("Magic_Potion", 350F, 2, 100F, EnumSet.of(CreatureAttributes.MP));
+        PotionProduct p3 = new PotionProduct("Magic_Potion", 350F, 2, 100F, EnumSet.of(CreatureAttributes.MANA));
         PotionProduct p4 = new PotionProduct("Luck_Elixir", 500F, 4, 65F, EnumSet.of(CreatureAttributes.AGILITY));
         PotionProduct p5 = new PotionProduct("Mermaid_Tears", 850F, 5, 100F, EnumSet.of(
-                CreatureAttributes.HP,
-                CreatureAttributes.MP,
+                CreatureAttributes.HEALTH,
+                CreatureAttributes.MANA,
                 CreatureAttributes.STRENGTH,
                 CreatureAttributes.AGILITY
         ));
         PotionProduct p6 = new PotionProduct("Ambrosia", 1000F, 8, 150F, EnumSet.of(
-                CreatureAttributes.HP,
-                CreatureAttributes.MP,
+                CreatureAttributes.HEALTH,
+                CreatureAttributes.MANA,
                 CreatureAttributes.STRENGTH,
                 CreatureAttributes.DEXTERITY,
                 CreatureAttributes.AGILITY

@@ -1,7 +1,7 @@
 package PubSub;
 
-import creature.Hero;
-import inventory.Inventory;
+import creature.Creature;
+import map.space.Space;
 
 /**
  * An interface for all observer designs
@@ -10,8 +10,7 @@ public interface GameObserver {
 
     /**
      * Notifying the observers with below attributes
-     * @param inventory inventory of the hero
-     * @param hero hero object itself
+     * @param creature hero object itself
      */
-    void notifying(Inventory inventory, Hero hero);
+    void notifying(Creature creature, Space space);
 }
