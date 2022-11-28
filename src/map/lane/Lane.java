@@ -63,15 +63,13 @@ public abstract class Lane {
         }
     }
 
-    public boolean isOpponentNearBy(Creature creature, int row, int col){
+    public boolean isOpponentNearBy(Creature creature){
+        int row = creature.getCurrentPosition().rowNumber;
+        int col = creature.getCurrentPosition().colNumber;
+
         int[][] nearByIndex = new int[][]{
-                {-1, -1},
-                {-1, 0},
-                {-1, +1},
+                {0, 0},
                 {0, +1},
-                {+1, +1},
-                {+1, 0},
-                {+1, -1},
                 {0, -1},
         };
         boolean opponentNearBy = false;

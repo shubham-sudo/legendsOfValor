@@ -128,7 +128,7 @@ public class LegendsOfValorController implements GameController {
         HashMap<String, String> spaceRepresentations = new HashMap<>();
 
         for (int i = 0; i < game.getMap().getLaneSize(); i++){
-            System.out.print(i + "\t");
+            System.out.print(i+1 + "\t");
             for (int j = 0; j < game.getMap().getNumberOfLanes(); j++){
 
                 Lane lane = lanes[j];
@@ -193,7 +193,7 @@ public class LegendsOfValorController implements GameController {
         System.out.println("Enter lane number to be teleported e.g. - 1");
         teleportPosition.laneNumber = getIntFromUser() - 1;
         System.out.println("Enter row number to be teleported in Lane - " + teleportPosition.laneNumber);
-        teleportPosition.rowNumber = getIntFromUser();
+        teleportPosition.rowNumber = getIntFromUser() - 1;
         System.out.println("Enter col number to be teleported in Lane - " + teleportPosition.laneNumber);
         teleportPosition.colNumber = getIntFromUser();
         return teleportPosition;
@@ -248,6 +248,12 @@ public class LegendsOfValorController implements GameController {
             System.out.println("The Space is already Occupied, Please move the creature first!");
         } else if (move.gameMove == GameMove.TELEPORT) {
             System.out.println("Teleport is only possible at lane rows already explored!");
+        } else if (move.gameMove == GameMove.LEFT || move.gameMove == GameMove.RIGHT) {
+            System.out.println("Cannot move on the Inaccessible space!");
+        } else if (move.gameMove == GameMove.UP || move.gameMove == GameMove.DOWN) {
+            System.out.println("Cannot move UP/DOWN when another creature near by!");
+        } else if (move.gameMove == GameMove.MARKET) {
+            System.out.println("You should be on your Nexus to access the market!");
         }
     }
 
@@ -272,14 +278,17 @@ public class LegendsOfValorController implements GameController {
                         humanReadableMessage(move);
                     }
                 } else {
+                    System.out.println();
                     System.out.println("Monster " + creature.displayValue() + " playing his move");
-                    // TODO: (shubham) if monster get automatic move should be biased to attack
-                    //      if hero is near to the next move
+                    Move move = game.getAutoMove(creature);
+                    game.playMove(move);
+                    getEnter();
                 }
                 displayMap();
             }
 
             // TODO: (shubham) check if any hero or monster died and revive them and place at home
+            //  check if anyone won the game after getting out of the while loop
         }
     }
 

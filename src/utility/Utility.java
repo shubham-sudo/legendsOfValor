@@ -12,17 +12,17 @@ public class Utility {
      * @param data data to use
      * @return string
      */
-    public static String paddedString(String[] data){
+    public static String getPaddedString(String[] data, int paddingLength){
         StringBuilder newData = new StringBuilder();
         for (String d : data){
             if (d != null) {
-                if (d.length() > 20){
-                    newData.append(d, 0, 19);
+                if (d.length() > paddingLength){
+                    newData.append(d, 0, paddingLength-1);
                 }else {
-                    newData.append(d).append(new String(new char[20 - d.length()]).replace("\0", " "));
+                    newData.append(d).append(new String(new char[paddingLength - d.length()]).replace("\0", " "));
                 }
             } else {
-                newData.append(new String(new char[20]).replace("\0", " "));
+                newData.append(new String(new char[paddingLength]).replace("\0", " "));
             }
         }
         return newData.toString();

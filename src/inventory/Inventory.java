@@ -1,9 +1,10 @@
 package inventory;
 
-import product.Product;
-import product.ProductType;
+import product.*;
+import utility.StandardOutput;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -96,11 +97,48 @@ public abstract class Inventory {
     }
 
     /**
-     * Show method shows the inventory products
+     * Shows the products present in the inventory of the market
      */
-    public abstract ArrayList<Product> show();
+    public void show() {
+        show(ProductType.ARMOR);
+        show(ProductType.WEAPON);
+        show(ProductType.POTION);
+        show(ProductType.SPELL);
+    }
 
-    public abstract ArrayList<Product> show(ProductType type);
+    /**
+     * Shows the specific products from the market
+     * @param type type of the product
+     */
+    public void show(ProductType type) {
+        List<Product> products;
+
+        switch (type){
+            case ARMOR:
+                products = this.products.values().stream().filter(product -> product instanceof Armor).collect(Collectors.toList());
+                StandardOutput.showArmorProducts(products);
+                break;
+            case WEAPON:
+                products = this.products.values().stream().filter(product -> product instanceof Weapon).collect(Collectors.toList());
+                StandardOutput.showWeaponProducts(products);
+                break;
+            case SPELL:
+            case ICESPELL:
+            case FIRESPELL:
+            case LIGHTNINGSPELL:
+                products = this.products.values().stream().filter(product -> product instanceof Spell).collect(Collectors.toList());
+                StandardOutput.showSpellProducts(products);
+                break;
+            case POTION:
+                products = this.products.values().stream().filter(product -> product instanceof Potion).collect(Collectors.toList());
+                StandardOutput.showPotionProducts(products);
+                break;
+            case ALL:
+                show();
+                break;
+        }
+    }
+
 }
 
 

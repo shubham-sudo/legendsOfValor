@@ -22,6 +22,7 @@ public class CreatureFactory {
         ArrayList<Hero> paladinHeros = new ArrayList<>();
         for (CreatureDataClass.HeroCreature heroCreature : heroCreatures){
             Hero hero = new Paladins(heroCreature.name, heroCreature.hp, heroCreature.mp, heroCreature.strength, heroCreature.agility, 2, heroCreature.dexterity, heroCreature.experience);
+            hero.getWallet().credit(heroCreature.money);
             paladinHeros.add(hero);
         }
         return paladinHeros;
@@ -36,6 +37,7 @@ public class CreatureFactory {
         ArrayList<Hero> sorcerersHeros = new ArrayList<>();
         for (CreatureDataClass.HeroCreature heroCreature : heroCreatures){
             Hero hero = new Sorcerers(heroCreature.name, heroCreature.hp, heroCreature.mp, heroCreature.strength, heroCreature.agility, 2, heroCreature.dexterity, heroCreature.experience);
+            hero.getWallet().credit(heroCreature.money);
             sorcerersHeros.add(hero);
         }
         return sorcerersHeros;
@@ -50,6 +52,7 @@ public class CreatureFactory {
         ArrayList<Hero> warriorsHeros = new ArrayList<>();
         for (CreatureDataClass.HeroCreature heroCreature : heroCreatures){
             Hero hero = new Warriors(heroCreature.name, heroCreature.hp, heroCreature.mp, heroCreature.strength, heroCreature.agility, 2, heroCreature.dexterity, heroCreature.experience);
+            hero.getWallet().credit(heroCreature.money);
             warriorsHeros.add(hero);
         }
         return warriorsHeros;

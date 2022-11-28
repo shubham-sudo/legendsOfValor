@@ -5,5 +5,8 @@ public enum ProductType {
     ARMOR,
     POTION,
     SPELL,
+    LIGHTNINGSPELL,
+    FIRESPELL,
+    ICESPELL,
     ALL
 }

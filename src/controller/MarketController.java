@@ -83,7 +83,7 @@ public class MarketController implements GameController {
      * @return true if possible, false otherwise
      */
     private boolean isSafeToBuy(Product product) {
-        return customer.getLevel() <= product.getLevel() && customer.getWallet().getGold() <= product.getPrice();
+        return customer.getLevel() >= product.getLevel() && customer.getWallet().getGold() >= product.getPrice();
     }
 
     /**
@@ -101,6 +101,8 @@ public class MarketController implements GameController {
             market.inventory().addProduct(product);
             customer.getWallet().credit(product.getPrice() * HERO_SELLING_FACTOR);
         }
+        System.out.println("\n \t\t\t\t######## " + customer.getName() + " inventory updated!!! ########");
+        customer.inventory().show(ProductType.valueOf(product.getClass().getSimpleName().toUpperCase()));
     }
 
     /**
@@ -124,13 +126,14 @@ public class MarketController implements GameController {
             }
         }
 
-        return market.inventory().getProduct(productCode);
+        return inventory.getProduct(productCode);
     }
 
     /**
      * Perform the buy or sell for any hero chosen by player
      */
     private void entertainCustomer(){
+        System.out.println("\n######## Welcome to " + market.getName() + "!!! ########");
         MarketMove marketMove;
 
         while (true){

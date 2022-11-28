@@ -2,6 +2,7 @@ package map;
 
 import creature.*;
 import map.lane.*;
+import map.space.FortressSpace;
 import map.space.Space;
 import move.GameMove;
 import move.Move;
@@ -75,7 +76,7 @@ public class BoardMap {
             Lane lane = lanes[i];
             lane.occupySpace(creatures.get(i), 0, 0);
             creatures.get(i).setHomeLane(i);
-            creatures.get(i).setCurrentPosition(i, lane.getLength()-1, lane.getWidth()-1);
+            creatures.get(i).setCurrentPosition(i, 0, 0);
         }
     }
 
@@ -95,8 +96,11 @@ public class BoardMap {
 
     public boolean isSafeToOccupy(Move move){
         Lane lane = getLane(move.laneNumber);
-        if ((move.gameMove == GameMove.UP || move.gameMove == GameMove.DOWN)
-                && !lane.isOpponentNearBy(move.creature, move.rowNumber, move.colNumber)
+        if (move.gameMove == GameMove.UP && !lane.isOpponentNearBy(move.creature)
+                && lane.isSafeToOccupy(move.creature, move.rowNumber, move.colNumber)){
+            return true;
+        }
+        if ((move.gameMove == GameMove.RECALL || move.gameMove == GameMove.DOWN)
                 && lane.isSafeToOccupy(move.creature, move.rowNumber, move.colNumber)){
             return true;
         } else if (move.gameMove == GameMove.LEFT || move.gameMove == GameMove.RIGHT){
@@ -127,5 +131,9 @@ public class BoardMap {
         }
         displayLanes[i] = lanes[k];
         return displayLanes;
+    }
+
+    public boolean isMarket(Move move){
+        return getLane(move.laneNumber).getSpace(move.rowNumber, move.colNumber) instanceof FortressSpace;
     }
 }
