@@ -86,26 +86,13 @@ public class LegendsOfValor extends Game{
 
     public Move getAutoMove(Creature creature){
         // Running this for monster so, it is biased to move only in south direction
-        // If monster is near to hero and also have valid down move than
-        // there are 10 % chances monster moves downward and 90 % chances to attack
 
         Move downMove = new Move(creature, creature.getHomeLane(), GameMove.DOWN);
         downMove.rowNumber = creature.getCurrentPosition().rowNumber + 1;
         downMove.colNumber = creature.getCurrentPosition().colNumber;
-
         boolean isHeroNearBy = map.getLane(creature.getHomeLane()).isOpponentNearBy(creature);
 
-        if (isHeroNearBy && map.isSafeToOccupy(downMove)){
-            float possibility = Utility.rollDice();
-            if (possibility > 10) {
-                Move attackMove = new Move(creature, creature.getHomeLane(), GameMove.ATTACK);
-                attackMove.rowNumber = creature.getCurrentPosition().rowNumber;
-                attackMove.colNumber = creature.getCurrentPosition().colNumber;
-                return attackMove;
-            } else {
-                return downMove;
-            }
-        } else if (map.isSafeToOccupy(downMove)){
+        if (map.isSafeToOccupy(downMove) && !isHeroNearBy){
             return downMove;
         } else {
             Move attackMove = new Move(creature, creature.getHomeLane(), GameMove.ATTACK);

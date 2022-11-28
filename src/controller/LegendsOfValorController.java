@@ -1,7 +1,5 @@
 package controller;
 
-import PubSub.GameWinObserver;
-import PubSub.GameWinPublisher;
 import creature.*;
 import factory.CreaturesFactory;
 import game.LegendsOfValor;
@@ -297,6 +295,9 @@ public class LegendsOfValorController implements GameController {
             // TODO: (shubham) check if any hero or monster died and revive them and place at home
             //  check if anyone won the game after getting out of the while loop
             //  spawn monster after every 8 rounds plus after every battle check if any creature dies .. revive them
+            //
+
+            // PUT A FLAG TO CHECK IF MONSTER POSITION IS DOWN THAN HERO
         }
     }
 

@@ -4,7 +4,6 @@ import creature.Creature;
 import creature.Hero;
 import map.Position;
 import map.space.Space;
-import move.Move;
 
 import java.util.HashSet;
 import java.util.NoSuchElementException;
@@ -24,11 +23,13 @@ public abstract class Lane {
     protected int width;
     protected Space[][] spaces;
     private final HashSet<Position> positions;
+    private final HashSet<Creature> creaturesInLane;
 
     public Lane(int length){
         this.id = ID++;
         this.length = length;
         positions = new HashSet<>();
+        creaturesInLane = new HashSet<>();
     }
 
     public Lane(){
@@ -54,7 +55,15 @@ public abstract class Lane {
         if (laneNumber == creature.getCurrentPosition().laneNumber){
             return false;
         }
-        return positions.contains(new Position(laneNumber, rowNumber, colNumber));
+        boolean positionBelowOtherCreatures = true;
+        for (Creature cr : creaturesInLane){
+            Position currentPosition = cr.getCurrentPosition();
+            if (currentPosition.rowNumber > rowNumber){
+                positionBelowOtherCreatures = false;
+                break;
+            }
+        }
+        return positions.contains(new Position(laneNumber, rowNumber, colNumber)) && positionBelowOtherCreatures;
     }
 
     private void addTeleportPositions(int row, int col){
@@ -103,6 +112,7 @@ public abstract class Lane {
         if (isSafeToOccupy(creature, spaceRow, spaceCol)) {
             getSpace(spaceRow, spaceCol).occupy(creature);
             creature.setCurrentPosition(id, spaceRow, spaceCol);
+            creaturesInLane.add(creature);
             if (creature instanceof Hero) {
                 addTeleportPositions(spaceRow, spaceCol);
             }
@@ -112,6 +122,7 @@ public abstract class Lane {
     }
 
     public void vacantSpace(Creature creature, int spaceRow, int spaceCol) {
+        creaturesInLane.remove(creature);
         getSpace(spaceRow, spaceCol).vacant(creature);
     }
 

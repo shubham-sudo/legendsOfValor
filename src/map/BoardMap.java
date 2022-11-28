@@ -95,13 +95,15 @@ public class BoardMap {
     }
 
     public boolean isSafeToOccupy(Move move){
+        if (move.laneNumber >= getPlayableLanes()){
+            return false;
+        }
         Lane lane = getLane(move.laneNumber);
         if (move.gameMove == GameMove.UP && !lane.isOpponentNearBy(move.creature)
                 && lane.isSafeToOccupy(move.creature, move.rowNumber, move.colNumber)){
             return true;
         }
-        if ((move.gameMove == GameMove.RECALL || move.gameMove == GameMove.DOWN)
-                && lane.isSafeToOccupy(move.creature, move.rowNumber, move.colNumber)){
+        if ((move.gameMove == GameMove.RECALL || move.gameMove == GameMove.DOWN) && lane.isSafeToOccupy(move.creature, move.rowNumber, move.colNumber)){
             return true;
         } else if (move.gameMove == GameMove.LEFT || move.gameMove == GameMove.RIGHT){
             return lane.isSafeToOccupy(move.creature, move.rowNumber, move.colNumber);

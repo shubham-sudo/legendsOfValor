@@ -6,6 +6,15 @@ Legends of Valor isa MOBA (multiplayer online battle arena)-like game. The playe
 ![move.png](move.png)
 ![teleport.png](teleport.png)
 
+# Moves
+## Teleport
+Teleport in this game works only for the spaces already explored my the hero.
+A hero cannot be teleported to a space which is not yet explored by any hero in the game.
+
+We can create a hashmap/hashset for all the creatures in Lane.java and compare the teleport
+position with the current positions of the creatures .. the teleported creature position should
+always be less than all the creatures in that lane.
+
 # Test Move
 1
 no
