@@ -42,7 +42,7 @@ public class BoardMap {
 
     public String[] getLaneLabels(){
         String[] strings = new String[getNumberOfLanes()];
-        int laneNumber = 0;
+        int laneNumber = 1;
         for (int i = 0; i < getNumberOfLanes(); i++){
             if (i % 2 == 0){
                 // Passable lane

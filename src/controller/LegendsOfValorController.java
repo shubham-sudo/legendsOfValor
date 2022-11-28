@@ -191,7 +191,7 @@ public class LegendsOfValorController implements GameController {
         System.out.println();
         System.out.println("Enter details to teleport Hero - " + creature.displayValue());
         System.out.println("Enter lane number to be teleported e.g. - 1");
-        teleportPosition.laneNumber = getIntFromUser();
+        teleportPosition.laneNumber = getIntFromUser() - 1;
         System.out.println("Enter row number to be teleported in Lane - " + teleportPosition.laneNumber);
         teleportPosition.rowNumber = getIntFromUser();
         System.out.println("Enter col number to be teleported in Lane - " + teleportPosition.laneNumber);
