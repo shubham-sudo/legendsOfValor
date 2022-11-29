@@ -10,12 +10,16 @@ import factory.*;
 import factory.MapFactory;
 import inventory.Inventory;
 import map.BoardMap;
+import map.lane.Lane;
 import move.GameMove;
 import move.Move;
 import player.Player;
 import utility.StandardOutput;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class LegendsOfValor extends Game{
@@ -27,7 +31,7 @@ public class LegendsOfValor extends Game{
     private static final String MONSTER_TEAM_NAME = "Pokemon's Team";
     private BoardMap map;
     private int maxLevel;
-    private int rounds;
+    private double rounds;
 
     @Override
     public void setOver() {
@@ -53,8 +57,16 @@ public class LegendsOfValor extends Game{
         return map;
     }
 
-    public int rounds() {
+    public double rounds() {
         return rounds;
+    }
+
+    public void increaseRound() {
+        rounds += 0.5;
+    }
+
+    public void resetRound(){
+        rounds = 0;
     }
 
     public boolean notOver(){
@@ -62,10 +74,12 @@ public class LegendsOfValor extends Game{
     }
 
     public void initializeBoard(){
+        Lane.ID = 0;
         this.map = new BoardMap();
     }
 
     public void initializeBoard(int numberOfLanes, int laneSize){
+        Lane.ID = 0;
         this.map = new BoardMap(numberOfLanes, laneSize);
     }
 
@@ -85,20 +99,13 @@ public class LegendsOfValor extends Game{
     }
 
     public void spawnMonsters() throws IllegalAccessException {
-        ArrayList<Creature> creatures = new ArrayList<>();
+        Player newPlayer = new Player(MONSTER_TEAM_NAME);
         for (int i = 0; i < getMap().getPlayableLanes(); i++){
             Creature creature = creaturesFactory.createMonsters(1, maxLevel).get(0);
-            creatures.add(creature);
+            newPlayer.addCreature(creature);
         }
-        getMap().sendMonstersOnMap(creatures);
-
-        for (Player player : players){
-            if (player.getName().equals(MONSTER_TEAM_NAME)) {
-                for (Creature creature : creatures) {
-                    player.addCreature(creature);
-                }
-            }
-        }
+        getMap().sendMonstersOnMap(newPlayer.getCreatures());
+        players.add(newPlayer);
     }
 
     public void addMonsters() throws IllegalAccessException {
@@ -167,15 +174,33 @@ public class LegendsOfValor extends Game{
         }
     }
 
+    public void restartGame(){
+        initializeBoard(BoardMap.DEFAULT_LANES, Lane.DEFAULT_LENGTH);
+        Player player = nextTurn();
+        try {
+            if (player.getName().equals(MONSTER_TEAM_NAME)) {
+                map.sendMonstersOnMap(player.getCreatures());
+                map.sendHeroesOnMap(nextTurn().getCreatures());
+            } else {
+                map.sendHeroesOnMap(player.getCreatures());
+                map.sendMonstersOnMap(nextTurn().getCreatures());
+            }
+        } catch (IllegalAccessException | IllegalArgumentException ie) {
+            // ie.printStackTrace();
+        }
+    }
+
     public void playMove(Move move){
         Creature opponent = map.getLane(move.laneNumber).getOpponentNearBy(move.creature);
         if (move.gameMove == GameMove.INFO) {
             try {
-                Player player = players.stream().filter(player1 -> player1.getName().equals(MONSTER_TEAM_NAME)).findFirst().get();
+                Stream<Player> allMonsterPlayer = players.stream().filter(player1 -> player1.getName().equals(MONSTER_TEAM_NAME));
                 boolean flag = true;
-                for (int i = 0; i < player.getCreatures().size(); i++) {
-                    StandardOutput.showCreature(player.getCreatures().get(i), flag, i+1);
-                    flag = false;
+                for (Player monsterPlayer : allMonsterPlayer.collect(Collectors.toList())){
+                    for (int i = 0; i < monsterPlayer.getCreatures().size(); i++) {
+                        StandardOutput.showCreature(monsterPlayer.getCreatures().get(i), flag, i+1);
+                        flag = false;
+                    }
                 }
             } catch (Exception e) {
                 // Passing since no monster found
@@ -199,7 +224,6 @@ public class LegendsOfValor extends Game{
                 iae.printStackTrace();
             }
         }
-        rounds++;
         maxLevel = Math.max(maxLevel, move.creature.getLevel());
     }
 }

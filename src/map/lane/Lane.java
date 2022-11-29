@@ -17,7 +17,7 @@ import java.util.NoSuchElementException;
 public abstract class Lane {
     public static final int DEFAULT_LENGTH = 8;
     public static final int DEFAULT_WIDTH = 2;
-    private static int ID = 0;
+    public static int ID = 0;
     private final int id;
     private final int length;
     protected int width;

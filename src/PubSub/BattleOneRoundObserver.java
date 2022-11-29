@@ -53,6 +53,7 @@ public class BattleOneRoundObserver implements GameObserver{
         if (game.rounds() % 8 == 0) {
             try {
                 game.spawnMonsters();
+                game.resetRound();
             } catch (IllegalAccessException ie) {
                 // ie.printStackTrace();
             }
@@ -62,5 +63,6 @@ public class BattleOneRoundObserver implements GameObserver{
     @Override
     public void notifying(Creature creature, Creature opponent, Space space) {
         applyOneRoundEffects(creature, opponent, space);
+        checkForNewMonsterSpawn();
     }
 }

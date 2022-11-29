@@ -288,16 +288,38 @@ public class LegendsOfValorController implements GameController {
         }
     }
 
+    private void checkExit(){
+        System.out.println();
+        System.out.println("Thank you for playing!!!");
+        System.out.println("Do you wanna give it another shot ?[Yes/No]\nMay be with different map");
+        boolean anotherShot = getUserYesOrNo();
+        if (!anotherShot) {
+            game.setOver();
+        } else {
+            game.restartGame();
+            game.nextTurn();  // skipping monster turn
+        }
+        // return anotherShot;
+    }
+
     private void driveGame(){
+        boolean exit = false;
         System.out.println("\n######## Game Started ########");
         while (game.notOver()){
             playerTurn = game.nextTurn();
+            game.increaseRound();
+            exit = false;
 
             // one round
             for (Creature creature : playerTurn){
                 if (creature instanceof Hero){
                     while (true) {
                         GameMove gameMove = getGameMove(creature);
+                        if (gameMove == GameMove.EXIT) {
+                            checkExit();
+                            exit = true;
+                            break;
+                        }
                         Move move = getMove(gameMove, creature);
                         if (game.isSafeMove(move)){
                             game.playMove(move);
@@ -315,25 +337,23 @@ public class LegendsOfValorController implements GameController {
                     getEnter();
                 }
                 displayMap();
-                if (!game.notOver()) {
+                if (!game.notOver() || exit) {
                     break;
                 }
             }
-
-            // TODO: (shubham) check if any hero or monster died and revive them and place at home
-            //  check if anyone won the game after getting out of the while loop
-            //  spawn monster after every 8 rounds plus after every battle check if any creature dies .. revive them
         }
-        System.out.println("\n######## Congratulations!!!, " + playerTurn.getName() + " Won this Game ########");
+        if (!exit){
+            System.out.println("\n######## Congratulations!!!, " + playerTurn.getName() + " Won this Game ########");
+        }
     }
 
     private void overview(){
         System.out.println();
         System.out.println(
-                "\t\t\t\tLegends of Valor isa MOBA (multiplayer online battle arena)-like game. \n" +
-                "\t\t\t\tThe player will control a team of 3 heroes who will attempt to fight their way \n" +
-                "\t\t\t\tthrough to the monsters’ Nexus.The heroes win if any of them reach the monsters’ Nexus. \n" +
-                "\t\t\t\tThe heroes lose if any monster reaches the heroes’ Nexus.\n"
+                "\t\tLegends of Valor isa MOBA (multiplayer online battle arena)-like game. \n" +
+                "\t\tThe player will control a team of 3 heroes who will attempt to fight their way \n" +
+                "\t\tthrough to the monsters’ Nexus.The heroes win if any of them reach the monsters’ Nexus. \n" +
+                "\t\tThe heroes lose if any monster reaches the heroes’ Nexus.\n"
         );
     }
 
