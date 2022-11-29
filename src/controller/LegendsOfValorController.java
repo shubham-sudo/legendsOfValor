@@ -17,19 +17,21 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 
+/**
+ * Controller for all the legends of valor game moves and interaction with the user
+ */
 public class LegendsOfValorController implements GameController {
     private final LegendsOfValor game;
     private Player playerTurn;
     private final CreaturesFactory creaturesFactory;
     private int numberOfLanes = BoardMap.DEFAULT_LANES;
 
+    /**
+     * Creates an object of the controller
+     */
     public LegendsOfValorController(){
         game = LegendsOfValor.getGameInstance();
         creaturesFactory = new CreaturesFactory();
-    }
-
-    public Player getLastTurnPlayer() {
-        return this.playerTurn;
     }
 
     /**
@@ -99,7 +101,7 @@ public class LegendsOfValorController implements GameController {
     }
 
     /**
-     * Get Player and Heroes
+     * Get Player and Heroes from the user
      */
     private Player getPlayer(){
         System.out.println();
@@ -161,6 +163,10 @@ public class LegendsOfValorController implements GameController {
 
     }
 
+    /**
+     * Display the data creatures to get the index from the user and create new Creature
+     * @param creatures list of creatures
+     */
     private void displayCreatures(ArrayList<? extends Creature> creatures){
         Iterator<? extends Creature> it = creatures.iterator();
         int i = 1;
@@ -176,6 +182,11 @@ public class LegendsOfValorController implements GameController {
         System.out.println();
     }
 
+    /**
+     * Get the game move from the player
+     * @param creature creature for the move is
+     * @return GameMove object
+     */
     private GameMove getGameMove(Creature creature){
         System.out.println();
         System.out.println("Possible Moves [u]UP, [d]DOWN, [r]RIGHT, [l]LEFT, [m]MARKET, [q]EXIT, \n[a]ATTACK, [c]CAST, [p]POTION, [e]EQUIP, [i]INFO, [b]RECALL, [t]TELEPORT");
@@ -193,6 +204,11 @@ public class LegendsOfValorController implements GameController {
         return move;
     }
 
+    /**
+     * Get the teleport position the user is trying to move on
+     * @param creature creature for the which the move is
+     * @return Position object
+     */
     private Position getTeleportPosition(Creature creature){
         Position teleportPosition = new Position();
         System.out.println();
@@ -206,6 +222,12 @@ public class LegendsOfValorController implements GameController {
         return teleportPosition;
     }
 
+    /**
+     * Computer the move by GameMove and make a Move object to call game.playMove
+     * @param gameMove GameMove of the creature given by User
+     * @param creature creature whose move is this
+     * @return Move object
+     */
     private Move getMove(GameMove gameMove, Creature creature){
         Move move = new Move(creature, creature.getHomeLane(), gameMove);
         Position position = creature.getCurrentPosition();
@@ -250,6 +272,10 @@ public class LegendsOfValorController implements GameController {
         return move;
     }
 
+    /**
+     * Human-readable errors to show in console
+     * @param move Move object the player played
+     */
     private void humanReadableMessage(Move move){
         System.out.println("Invalid Move, Try again!!!");
         switch (move.gameMove) {
@@ -296,6 +322,10 @@ public class LegendsOfValorController implements GameController {
         }
     }
 
+    /**
+     * Check if user want to really exit in between or
+     * want to switch map
+     */
     private void checkExit(){
         System.out.println();
         System.out.println("Thank you for playing!!!");
@@ -310,6 +340,9 @@ public class LegendsOfValorController implements GameController {
         // return anotherShot;
     }
 
+    /**
+     * Drive the game
+     */
     private void driveGame(){
         boolean exit = false;
         System.out.println("\n######## Game Started ########");
@@ -349,20 +382,16 @@ public class LegendsOfValorController implements GameController {
                     break;
                 }
             }
+            game.removeFaintedMonsters();
         }
         if (!exit){
             System.out.println("\n######## Congratulations!!!, " + playerTurn.getName() + " Won this Game ########");
         }
-
-
-
-
-        // TODO (shubham) -- FIX THE ATTACK DAMAGE and FAINTED HERO SHOULD NOT BE ABLE TO ATTACK
-
-
-
     }
 
+    /**
+     * Shows the overview of the Game
+     */
     private void overview(){
         System.out.println();
         System.out.println(
@@ -373,6 +402,9 @@ public class LegendsOfValorController implements GameController {
         );
     }
 
+    /**
+     * run the game by taking necessary steps
+     */
     @Override
     public void run() {
         overview();
@@ -380,7 +412,7 @@ public class LegendsOfValorController implements GameController {
         game.initializeBoard(numberOfLanes, Lane.DEFAULT_LENGTH);
         try {
             game.addPlayers(getPlayer());
-            game.addMonsters();
+            game.spawnMonsters();
         } catch (IllegalAccessException | IllegalArgumentException iae) {
             iae.printStackTrace();
         }

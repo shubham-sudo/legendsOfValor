@@ -16,18 +16,17 @@ public class MarketFactory {
 
     /**
      * Create a random market and add products into the inventory of the market
-     * @param level level of the product this market servers
      * @return Market object
      */
-    public Market createMarket(int level){
+    public Market createMarket(){
         Market market = new Market(marketNames[new Random().nextInt(marketNames.length)]);
         List<Product> products = new ArrayList<>();
-        products.addAll(productFactory.getWeapons(level));
-        products.addAll(productFactory.getArmors(level));
-        products.addAll(productFactory.getLightningSpells(level));
-        products.addAll(productFactory.getFireSpells(level));
-        products.addAll(productFactory.getIceSpells(level));
-        products.addAll(productFactory.getPotions(level));
+        products.addAll(productFactory.getWeapons());
+        products.addAll(productFactory.getArmors());
+        products.addAll(productFactory.getLightningSpells());
+        products.addAll(productFactory.getFireSpells());
+        products.addAll(productFactory.getIceSpells());
+        products.addAll(productFactory.getPotions());
         market.addProducts(products);
         return market;
     }

@@ -6,6 +6,7 @@ import controller.BattleController;
 import controller.MarketController;
 import creature.Creature;
 import creature.Hero;
+import creature.Monster;
 import factory.*;
 import factory.MapFactory;
 import inventory.Inventory;
@@ -16,12 +17,17 @@ import move.Move;
 import player.Player;
 import utility.StandardOutput;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+/**
+ * Legends of valor game is played by this class
+ * It manages all the operation which can happen in this game
+ * It computes the safest moves and also generate move for computer player
+ */
 public class LegendsOfValor extends Game{
     private static LegendsOfValor legendsOfValor;
     private static final MapFactory mapFactory = new MapFactory();  // TODO: (Shubham) have to use map factory for maps
@@ -29,20 +35,32 @@ public class LegendsOfValor extends Game{
     private static final MarketController marketController = new MarketController();
     private static final BattleController battleController = BattleController.getBattleControllerInstance();
     private static final String MONSTER_TEAM_NAME = "Pokemon's Team";
+    private final HashSet<Creature> faintedCreatures;
     private BoardMap map;
     private int maxLevel;
     private double rounds;
 
+    /**
+     * Set game to over
+     */
     @Override
     public void setOver() {
         over = true;
     }
 
+    /**
+     * Constructor for Legends of Valor
+     */
     private LegendsOfValor(){
         over = false;
+        faintedCreatures = new HashSet<>();
         GameWinPublisher.getWinPublisherInstance().register(new GameWinObserver());
     }
 
+    /**
+     * Get game instance
+     * @return LegendsOfValor
+     */
     public static LegendsOfValor getGameInstance() {
         if (legendsOfValor == null) {
             legendsOfValor = new LegendsOfValor();
@@ -50,6 +68,10 @@ public class LegendsOfValor extends Game{
         return legendsOfValor;
     }
 
+    /**
+     * Get map of the game
+     * @return BoardMap
+     */
     public BoardMap getMap() {
         if (map == null){
             initializeBoard();
@@ -57,38 +79,69 @@ public class LegendsOfValor extends Game{
         return map;
     }
 
+    /**
+     * Getter for number of rounds
+     * @return double
+     */
     public double rounds() {
         return rounds;
     }
 
+    /**
+     * Increase the round
+     */
     public void increaseRound() {
         rounds += 0.5;
     }
 
+    /**
+     * Reset the round to 0
+     */
     public void resetRound(){
         rounds = 0;
     }
 
+    /**
+     * check if the game is not over
+     * @return boolean
+     */
     public boolean notOver(){
         return !over;
     }
 
+    /**
+     * Initialize the new board
+     */
     public void initializeBoard(){
         Lane.ID = 0;
         this.map = new BoardMap();
     }
 
+    /**
+     * Initialize the board with different configurations
+     * @param numberOfLanes number of lanes
+     * @param laneSize one lane size
+     */
     public void initializeBoard(int numberOfLanes, int laneSize){
         Lane.ID = 0;
         this.map = new BoardMap(numberOfLanes, laneSize);
     }
 
+    /**
+     * Reinitialize the board if required
+     */
     public void reinitializeBoard(){
         int numberOfLanes = this.map.getNumberOfLanes();
         int laneSize = this.map.getLaneSize();
         this.map = new BoardMap(numberOfLanes, laneSize);
     }
 
+    /**
+     * Add player to the game
+     * @param player player object
+     * @throws IllegalArgumentException  Should be equal to the number of lanes
+     * @throws IllegalAccessException should not access the same space on board
+     */
     public void addPlayers(Player player) throws IllegalArgumentException, IllegalAccessException {
         if (player.size() != this.map.getPlayableLanes()){
             throw new IllegalArgumentException("Insufficient number of Creatures");
@@ -98,32 +151,27 @@ public class LegendsOfValor extends Game{
         players.add(player);
     }
 
+    /**
+     * Spawn monster to the game and create a new player for them
+     * @throws IllegalAccessException should not access the same space on board
+     */
     public void spawnMonsters() throws IllegalAccessException {
         Player newPlayer = new Player(MONSTER_TEAM_NAME);
-        for (int i = 0; i < getMap().getPlayableLanes(); i++){
-            Creature creature = creaturesFactory.createMonsters(1, maxLevel).get(0);
-            newPlayer.addCreature(creature);
-        }
-        getMap().sendMonstersOnMap(newPlayer.getCreatures());
-        players.add(newPlayer);
-    }
-
-    public void addMonsters() throws IllegalAccessException {
-        Player monsterPlayer = new Player(MONSTER_TEAM_NAME);
 
         for (int i = 0; i < this.map.getPlayableLanes(); i++){
             Creature creature = creaturesFactory.createMonsters(1, maxLevel).get(0);
-            monsterPlayer.addCreature(creature);
+            newPlayer.addCreature(creature);
         }
-
-        this.map.sendMonstersOnMap(monsterPlayer.getCreatures());
-        players.add(monsterPlayer);
+        this.map.sendMonstersOnMap(newPlayer.getCreatures());
+        players.add(newPlayer);
     }
 
+    /**
+     * Get auto move for the Monster creature
+     * @param creature creature
+     * @return Move object
+     */
     public Move getAutoMove(Creature creature){
-        // Running this for monster so, it is biased to move only in south direction
-        // TODO: (shubham) monster can move in all directions
-
         Move downMove = new Move(creature, creature.getHomeLane(), GameMove.DOWN);
         downMove.rowNumber = creature.getCurrentPosition().rowNumber + 1;
         downMove.colNumber = creature.getCurrentPosition().colNumber;
@@ -139,6 +187,11 @@ public class LegendsOfValor extends Game{
         }
     }
 
+    /**
+     * Check if the move is safe on board
+     * @param move Move object
+     * @return boolean
+     */
     public boolean isSafeMove(Move move){
         if (move.gameMove == GameMove.MARKET && map.isMarket(move)) {
             return true;
@@ -166,6 +219,10 @@ public class LegendsOfValor extends Game{
         return false;
     }
 
+    /**
+     * Open the market for the creature
+     * @param creature creature who wants to enter in market
+     */
     private void openMarket(Creature creature) {
         marketController.setNewCustomer((Hero) creature);
         try {
@@ -175,6 +232,9 @@ public class LegendsOfValor extends Game{
         }
     }
 
+    /**
+     * Restart game if required
+     */
     public void restartGame(){
         initializeBoard(BoardMap.DEFAULT_LANES, Lane.DEFAULT_LENGTH);
         Player player = nextTurn();
@@ -191,6 +251,24 @@ public class LegendsOfValor extends Game{
         }
     }
 
+    /**
+     * Remove fainted monsters from the board & players list
+     */
+    public void removeFaintedMonsters() {
+        Stream<Player> allMonsterPlayer = players.stream().filter(player1 -> player1.getName().equals(MONSTER_TEAM_NAME));
+        List<Player> allMonsterPlayers = allMonsterPlayer.collect(Collectors.toList());
+
+        for (Creature fainted : faintedCreatures) {
+            for (Player monsters : allMonsterPlayers) {
+                monsters.removeCreature(fainted);
+            }
+        }
+    }
+
+    /**
+     * Play the move on the board
+     * @param move Move object
+     */
     public void playMove(Move move){
         Creature opponent = map.getLane(move.laneNumber).getOpponentNearBy(move.creature);
         if (move.gameMove == GameMove.INFO) {
@@ -224,6 +302,9 @@ public class LegendsOfValor extends Game{
             } catch (IllegalArgumentException | IllegalAccessException iae) {
                 iae.printStackTrace();
             }
+        }
+        if (opponent instanceof Monster && !opponent.isAlive()) {
+            faintedCreatures.add(opponent);
         }
         maxLevel = Math.max(maxLevel, move.creature.getLevel());
     }

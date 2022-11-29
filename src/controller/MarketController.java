@@ -119,10 +119,14 @@ public class MarketController implements GameController, ProductController {
         }
     }
 
+    /**
+     * Run the market once customer is set to buy & sell
+     * @throws IllegalAccessException if customer not found
+     */
     @Override
     public void run() throws IllegalAccessException {
         if (customer != null){
-            market = marketFactory.createMarket(1);  // TODO: (shubham) remove level from the market
+            market = marketFactory.createMarket();
             entertainCustomer();
         } else {
             throw new IllegalAccessException("No Customer found!");

@@ -4,6 +4,9 @@ import utility.SingletonScanner;
 
 import java.util.Scanner;
 
+/**
+ * Define the default methods which a manager need to get the inputs from console
+ */
 public interface GameInputManager {
     Scanner scanner = SingletonScanner.getInstance();
 

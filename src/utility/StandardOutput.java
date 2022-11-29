@@ -9,6 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+
+/**
+ * Standard Output helps to generate nice looking table and aligning stuff in console.
+ */
 public class StandardOutput {
     private static final String[] productsHeader = new String[]{
             "Name",
@@ -36,6 +40,10 @@ public class StandardOutput {
 
     private static final int columnLength = 22;
 
+    /**
+     * Show armors in a table
+     * @param armors armors list
+     */
     public static void showArmorProducts(List<? extends Product> armors) {
         String[] armorHeader = new String[]{
                 "Damage Reduction"
@@ -61,6 +69,10 @@ public class StandardOutput {
         }
     }
 
+    /**
+     * Show spells in a table
+     * @param spells list
+     */
     public static void showSpellProducts(List<? extends Product> spells) {
         String[] spellHeader = new String[]{
                 "Damage Value",
@@ -88,6 +100,10 @@ public class StandardOutput {
         }
     }
 
+    /**
+     * Show weapons in a table
+     * @param weapons list
+     */
     public static void showWeaponProducts(List<? extends Product> weapons) {
         String[] weaponHeader = new String[]{
                 "Damage",
@@ -115,6 +131,10 @@ public class StandardOutput {
         }
     }
 
+    /**
+     * Show potions in a table
+     * @param potions list
+     */
     public static void showPotionProducts(List<? extends Product> potions) {
         String[] potionHeader = new String[]{
                 "Healing Value",
@@ -142,6 +162,12 @@ public class StandardOutput {
         }
     }
 
+    /**
+     * Show creature in a table
+     * @param creature creature
+     * @param header boolean
+     * @param index index to show
+     */
     public static void showCreature(Creature creature, boolean header, int index){
         int newColumnLength = 15;
         String[] details = null;
@@ -177,6 +203,11 @@ public class StandardOutput {
         System.out.println(Utility.getPaddedString(details, newColumnLength));
     }
 
+    /**
+     * helper method for show creatues
+     * @param creature creature object
+     * @return string array
+     */
     private static String[] getStrings(Creature creature) {
         String[] details;
         details = new String[heroHeader.length];

@@ -16,7 +16,6 @@ public class CreatureInventory extends Inventory {
     @Override
     public void addProduct(Product product) {
         super.addProduct(product);
-        // TODO: (shubham) notify that the inventory is updated
     }
 
     /**
@@ -26,6 +25,5 @@ public class CreatureInventory extends Inventory {
     @Override
     public void removeProduct(Product product) {
         super.removeProduct(product);
-        // TODO: (shubham) notify that the inventory is updated
     }
 }

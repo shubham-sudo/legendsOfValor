@@ -5,7 +5,7 @@ package creature;
  * Paladins is a type of Hero with more strength and agility
  */
 public class Paladins extends Hero{
-    private final double LEVEL_UP_FACTOR = 0.05;    // TODO: (shubham) pick this up from config files
+    private final double LEVEL_UP_FACTOR = 0.05;
 
     /**
      * Creates a new Paladin

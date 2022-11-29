@@ -31,61 +31,113 @@ public abstract class AbstractCreature implements Creature {
         this.currentPosition = new Position();
     }
 
+    /**
+     * Getter for current health
+     *
+     * @see Creature#getHealth()
+     * @return double
+     */
     @Override
     public double getHealth() {
         return this.baseHealth;
     }
 
+    /**
+     * Getter for strength
+     * @return double
+     */
     @Override
     public double getStrength() {
         return strength;
     }
 
+    /**
+     * Getter for agility
+     * @return double
+     */
     @Override
     public double getAgility() {
         return agility;
     }
 
+    /**
+     * Getter for mana
+     * @return double
+     */
     @Override
     public double getMana() {
         return 0;
     }
 
+    /**
+     * Getter for experience
+     * @return double
+     */
     @Override
     public double getExperience() {
         return 0;
     }
 
+    /**
+     * Getter for base health
+     * @return double
+     */
     @Override
     public double baseHealth(){
         return this.baseHealth;
     }
 
+    /**
+     * Getter for home lane
+     * @return integer lane id
+     */
     @Override
     public int getHomeLane(){
         return this.homeLane;
     }
 
+    /**
+     * Setter for home lane
+     * @param laneNumber integer lane number
+     */
     @Override
     public void setHomeLane(int laneNumber){
         this.homeLane = laneNumber;
     }
 
+    /**
+     * Getter for dodge
+     * @return double
+     */
     @Override
     public double getDodgeChance() {
         return this.agility;
     }
 
+    /**
+     * Getter for dexterity
+     * @return double
+     */
     @Override
     public double getDexterity(){
         return 0;
     }
 
+    /**
+     * Getter for position
+     * @return Position
+     */
     @Override
     public Position getCurrentPosition(){
         return this.currentPosition != null ? this.currentPosition : null;
     }
 
+    /**
+     * Setter for current Position
+     * @param laneNumber lane number
+     * @param row rowNumber
+     * @param col colNumber
+     */
     @Override
     public void setCurrentPosition(int laneNumber, int row, int col){
         this.currentPosition.laneNumber = laneNumber;
@@ -93,14 +145,26 @@ public abstract class AbstractCreature implements Creature {
         this.currentPosition.colNumber = col;
     }
 
+    /**
+     * Decrease agility
+     * @param agility double
+     */
     @Override
     public void decreaseAgility(double agility) {
         this.agility = (this.agility - agility) < 0 ? 0 : (this.agility - agility);
     }
 
+    /**
+     * Decrease dexterity
+     * @param dexterity double
+     */
     @Override
     public void decreaseDexterity(double dexterity){}
 
+    /**
+     * Decrease health
+     * @param health double
+     */
     @Override
     public void decreaseHealth(double health) {
         this.baseHealth = Math.max((this.baseHealth - health), 0);
@@ -109,6 +173,10 @@ public abstract class AbstractCreature implements Creature {
         }
     }
 
+    /**
+     * Decrease strength
+     * @param strength double
+     */
     @Override
     public void decreaseStrength(double strength) {
         this.strength = (this.strength - strength) < 0 ? 0 : (this.strength - strength);
@@ -131,19 +199,35 @@ public abstract class AbstractCreature implements Creature {
         return name;
     }
 
+    /**
+     * increase agility
+     * @param agility double
+     */
     @Override
     public void increaseAgility(double agility) {
         this.agility += agility;
     }
 
+    /**
+     * increase dexterity
+     * @param dexterity double
+     */
     @Override
     public void increaseDexterity(double dexterity){}
 
+    /**
+     * increase health
+     * @param health double
+     */
     @Override
     public void increaseHealth(double health) {
         this.baseHealth += health;
     }
 
+    /**
+     * increase strength
+     * @param strength double
+     */
     @Override
     public void increaseStrength(double strength) {
         this.strength += strength;
@@ -158,6 +242,9 @@ public abstract class AbstractCreature implements Creature {
         return this.alive;
     }
 
+    /**
+     * Leveling up a creature
+     */
     protected void levelUp(){
         this.level++;
         this.baseHealth += this.level * 100;

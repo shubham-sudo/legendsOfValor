@@ -1,6 +1,9 @@
 package move;
 
-// UP, DOWN, RIGHT, LEFT, MARKET, ATTACK, CAST, POTION, EQUIP, INFO
+/**
+ * Game Moves
+ * UP, DOWN, RIGHT, LEFT, MARKET, ATTACK, CAST, POTION, EQUIP, INFO
+ */
 public enum GameMove {
     UP('u'),
     DOWN('d'),
@@ -22,6 +25,12 @@ public enum GameMove {
         this.move = move;
     }
 
+    /**
+     * Check the string and return Game move
+     * @param move Move
+     * @return Game Move
+     * @throws IllegalArgumentException
+     */
     public static GameMove vOf(char move) throws IllegalArgumentException{
         for (GameMove gameMove : GameMove.values()){
             if (gameMove.equals(move)){

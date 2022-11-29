@@ -1,9 +1,5 @@
 package controller;
 
-import utility.SingletonScanner;
-
-import java.util.Scanner;
-
 /**
  * An interface for providing default api and functions for running game(s)
  */

@@ -22,6 +22,10 @@ public class FireSpell extends Spell{
         super(name, level, price, description, damageValue, requiredMana);
     }
 
+    /**
+     * Getter for the affected attribute
+     * @return string
+     */
     @Override
     public String affectedAttribute() {
         return affectedAttribute;

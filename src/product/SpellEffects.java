@@ -8,6 +8,12 @@ import creature.*;
  */
 public interface SpellEffects {
 
+    /**
+     * Compute the total damage for a spell
+     * @param baseDamage base damage for spell
+     * @param dexterity dexterity of creature
+     * @return double
+     */
     default double getSpellDamage(double baseDamage, double dexterity){
         return baseDamage + (dexterity/10000) * baseDamage;
     }

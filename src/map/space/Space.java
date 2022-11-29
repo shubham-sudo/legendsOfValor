@@ -8,15 +8,34 @@ import creature.Creature;
  */
 public interface Space {
     String ANSI_RESET = "\u001B[0m";
-    String EMPTY_SPACE = "     ";  // TODO: Add something on special space to recognize.
+    String EMPTY_SPACE = "     ";
     String CREATURE_CHARACTER_SPACE = "  ";
 
+    /**
+     * Check if space is free and can be occupied by this creature
+     * @param creature creature object
+     * @return boolean
+     */
     boolean isSafeToOccupy(Creature creature);
 
+    /**
+     * Occupy the space if it is safe to occupy
+     * @param creature creature who want to occupy
+     * @throws IllegalAccessException If invalid operation
+     */
     void occupy(Creature creature) throws IllegalAccessException;
 
+    /**
+     * Vacant this space
+     * @param creature creature who is moving
+     */
     void vacant(Creature creature);
 
+    /**
+     * Check if opponent is nearby
+     * @param creature creature object
+     * @return boolean
+     */
     boolean hasOpponent(Creature creature);
 
     /**
@@ -39,6 +58,14 @@ public interface Space {
      */
     String displayValue();
 
+    /**
+     * Get the display value for this space
+     * which will be used on board
+     *
+     * @param hero hero if present on space
+     * @param monster monster if present on space
+     * @return String
+     */
     static String getValue(Creature hero, Creature monster) {
         if (hero == null && monster == null){
             return EMPTY_SPACE;

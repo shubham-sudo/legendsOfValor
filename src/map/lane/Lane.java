@@ -25,6 +25,10 @@ public abstract class Lane {
     private final HashSet<Position> positions;
     private final HashSet<Creature> creaturesInLane;
 
+    /**
+     * Lane constructor
+     * @param length length of lane constructor
+     */
     public Lane(int length){
         this.id = ID++;
         this.length = length;
@@ -32,18 +36,18 @@ public abstract class Lane {
         creaturesInLane = new HashSet<>();
     }
 
+    /**
+     * Constructor
+     */
     public Lane(){
         this(DEFAULT_LENGTH);
     }
 
-    public Space[][] getLane() {
-        return spaces;
-    }
-
-    public int getId() {
-        return id;
-    }
-
+    /**
+     * Get Creature, if creature is present in nearby spaces of this lane
+     * @param creature creature on the lane
+     * @return Creature
+     */
     public Creature getOpponentNearBy(Creature creature) {
         Creature opponent = null;
         int row = creature.getCurrentPosition().rowNumber;
@@ -75,6 +79,13 @@ public abstract class Lane {
         return opponent;
     }
 
+    /**
+     * Get the space of the lane
+     * @param row rowNumber
+     * @param col colNumber
+     * @return Space object
+     * @throws NoSuchElementException If no such space exists
+     */
     public Space getSpace(int row, int col) throws NoSuchElementException {
         if (row > -1 && row < this.length && col > -1 && col < this.width){
             return this.spaces[row][col];
@@ -82,6 +93,14 @@ public abstract class Lane {
         throw new NoSuchElementException("Invalid index!");
     }
 
+    /**
+     * Check if it safe to teleport in this lane at particular space
+     * @param creature creature who wants to teleport
+     * @param laneNumber lane number
+     * @param rowNumber row number
+     * @param colNumber col number
+     * @return boolean
+     */
     public boolean isSafeToTeleport(Creature creature, int laneNumber, int rowNumber, int colNumber){
         if (laneNumber == creature.getCurrentPosition().laneNumber){
             return false;
@@ -97,12 +116,22 @@ public abstract class Lane {
         return positions.contains(new Position(laneNumber, rowNumber, colNumber)) && positionBelowOtherCreatures;
     }
 
+    /**
+     * Add position to teleport hashset to track
+     * @param row row number
+     * @param col col number
+     */
     private void addTeleportPositions(int row, int col){
         for (int i = 0; i < spaces[row].length; i++){
             positions.add(new Position(id, row, i));
         }
     }
 
+    /**
+     * Check if opponent is nearby to the creature
+     * @param creature creature object
+     * @return boolean
+     */
     public boolean isOpponentNearBy(Creature creature){
         int row = creature.getCurrentPosition().rowNumber;
         int col = creature.getCurrentPosition().colNumber;
@@ -128,6 +157,13 @@ public abstract class Lane {
         return opponentNearBy;
     }
 
+    /**
+     * Check if it safe to occupy this space of lane
+     * @param creature creature who want to occupy
+     * @param spaceRow row number
+     * @param spaceCol col number
+     * @return boolean
+     */
     public boolean isSafeToOccupy(Creature creature, int spaceRow, int spaceCol) {
         try {
             if (getSpace(spaceRow, spaceCol).isSafeToOccupy(creature)) {
@@ -139,6 +175,13 @@ public abstract class Lane {
         return false;
     }
 
+    /**
+     * Occupy the space if it is safe to occupy
+     * @param creature creature
+     * @param spaceRow row number
+     * @param spaceCol col number
+     * @throws IllegalAccessException if not a valid operation
+     */
     public void occupySpace(Creature creature, int spaceRow, int spaceCol) throws IllegalAccessException {
         if (isSafeToOccupy(creature, spaceRow, spaceCol)) {
             getSpace(spaceRow, spaceCol).occupy(creature);
@@ -152,11 +195,24 @@ public abstract class Lane {
         }
     }
 
+    /**
+     * Vacant the space of a lane when creature move from that space
+     * @param creature creature who was at the space
+     * @param spaceRow row number
+     * @param spaceCol col number
+     */
     public void vacantSpace(Creature creature, int spaceRow, int spaceCol) {
         creaturesInLane.remove(creature);
         getSpace(spaceRow, spaceCol).vacant(creature);
     }
 
+    /**
+     * Set the space to a special or normal space object
+     * @param row row number
+     * @param col col number
+     * @param space space object
+     * @throws NoSuchElementException if unable to access to position
+     */
     protected void setSpace(int row, int col, Space space) throws NoSuchElementException{
         if (row > -1 && row < this.length && col > -1 && col < this.width){
             this.spaces[row][col] = space;
@@ -165,17 +221,31 @@ public abstract class Lane {
         }
     }
 
+    /**
+     * Getter for length
+     * @return integer
+     */
     public int getLength() {
         return this.length;
     }
 
+    /**
+     * Getter for width
+     * @return integer
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Initialize the lane and add spaces
+     */
     public void initialize() {
         buildLane();
     }
 
+    /**
+     * Abstract method to build lane
+     */
     protected abstract void buildLane();
 }

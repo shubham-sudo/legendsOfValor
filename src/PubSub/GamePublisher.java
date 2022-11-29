@@ -17,6 +17,8 @@ public interface GamePublisher {
     /**
      * notify observer when required
      * @param creature hero object
+     * @param opponent opponent for this game or battle
+     * @param space space object
      */
     void notifyObservers(Creature creature, Creature opponent, Space space);
 }

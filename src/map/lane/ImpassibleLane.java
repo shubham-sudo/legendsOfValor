@@ -11,16 +11,26 @@ import map.space.InaccessibleSpace;
 public class ImpassibleLane extends Lane {
     public static final int DEFAULT_WIDTH = 1;
 
+    /**
+     * Constructor for impassable lane
+     * @param length length of lane
+     */
     public ImpassibleLane(int length){
         super(length);
         this.width = DEFAULT_WIDTH;
         this.spaces = new InaccessibleSpace[getLength()][width];
     }
 
+    /**
+     * Constructor
+     */
     public ImpassibleLane(){
         this(Lane.DEFAULT_LENGTH);
     }
 
+    /**
+     * Build the impassable lane
+     */
     protected void buildLane(){
         for (int i = 0; i < getLength(); i++) {
             for (int j = 0; j < getWidth(); j++){

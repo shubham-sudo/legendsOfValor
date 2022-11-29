@@ -4,7 +4,7 @@ package creature;
  * Warriors is a type of hero with more strength and dexterity
  */
 public class Warriors extends Hero{
-    private final double LEVEL_UP_FACTOR = 0.05;    // TODO: (shubham) pick this up from config files
+    private final double LEVEL_UP_FACTOR = 0.05;
 
     /**
      * Creates a new sorcerers

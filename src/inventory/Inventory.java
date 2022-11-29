@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * abstract inventory for Market and Creatures
+ * Abstract inventory for Market and Creatures
  */
 public abstract class Inventory {
     protected final HashMap<String, Product> products;
@@ -22,6 +22,10 @@ public abstract class Inventory {
         this.productCountMap = new HashMap<>();
     }
 
+    /**
+     * Constructor with products
+     * @param products List of products to add into inventory
+     */
     public Inventory(ArrayList<Product> products) {
         this();
         addProducts(products);

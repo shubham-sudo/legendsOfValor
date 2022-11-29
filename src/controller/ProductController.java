@@ -4,6 +4,9 @@ import inventory.Inventory;
 import product.Product;
 import product.ProductType;
 
+/**
+ * Controller which gives all operation to operate on products (Items)
+ */
 public interface ProductController extends GameInputManager {
 
     /**
@@ -28,7 +31,11 @@ public interface ProductController extends GameInputManager {
         return productType;
     }
 
-
+    /**
+     * Get product from the given inventory asking user the product_code
+     * @param inventory inventory object
+     * @return product object or null
+     */
     default Product getProduct(Inventory inventory){
         System.out.println();
         System.out.println("Enter the product_code ['q' to exit the operation]");

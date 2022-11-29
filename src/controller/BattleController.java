@@ -14,16 +14,27 @@ import utility.Utility;
 import java.util.Iterator;
 
 
+/**
+ * Battle controller to do attack, cast, potion, equip type of moves
+ * It is a singleton class
+ */
 public class BattleController implements GameController, ProductController{
     private static BattleController battleController;
     private static final double WEAPON_DAMAGE_FACTOR = 0.05;
     private static final double HERO_DODGE_CHANCE_FACTOR = 0.002;
     private static final double MONSTER_DODGE_CHANCE_FACTOR = 0.01;
 
+    /**
+     * Constructor from the Battle Controller
+     */
     private BattleController(){
         BattleOneRoundPublisher.getBattleOneRoundPublisherInstance().register(new BattleOneRoundObserver());
     }
 
+    /**
+     * get the instance of battle controller
+     * @return BattleController object
+     */
     public static BattleController getBattleControllerInstance() {
         if (battleController == null) {
             battleController = new BattleController();
@@ -31,6 +42,11 @@ public class BattleController implements GameController, ProductController{
         return battleController;
     }
 
+    /**
+     * Check if the creature can cast the spell by checking required mana
+     * @param creature creature who wants to cast the spell
+     * @return true if creature can, false otherwise
+     */
     public boolean canCast(Creature creature) {
         Hero hero = (Hero) creature;
         Iterator<Product> it = hero.inventory().productsIterator();
@@ -46,10 +62,20 @@ public class BattleController implements GameController, ProductController{
         return false;
     }
 
+    /**
+     * Get the actual attack impact by the creature after using weapons or armors
+     * @param attacker Attacker creature
+     * @param opponent Opponent creature
+     * @return double damage value
+     */
     private double getActualAttackDamage(Creature attacker, Creature opponent){
         double totalDamage = attacker.getDamage();
 
         if (attacker instanceof Hero) {
+            totalDamage -= totalDamage * 0.25;
+        }
+
+        if (attacker instanceof Hero && ((Hero) attacker).getInHandWeapons().size() > 0) {
             totalDamage = 0;
             for (Weapon weapon : ((Hero) attacker).getInHandWeapons()) {
                 totalDamage += (attacker.getDamage() + weapon.getDamageValue()) * WEAPON_DAMAGE_FACTOR;
@@ -68,12 +94,16 @@ public class BattleController implements GameController, ProductController{
         return (totalDamage - totalDefence) > 0 ? (totalDamage - totalDefence) : (totalDamage - totalDefence) + 10;
     }
 
+    /**
+     * Cast the spell
+     * @param creature creature who wants to cast
+     * @param opponent opponent who will be getting damage
+     */
     public void cast(Creature creature, Creature opponent){
         Hero hero = (Hero) creature;
-        Monster monster = (Monster) opponent;
 
-        if (Utility.rollDice() < (monster.getDodgeChance() * MONSTER_DODGE_CHANCE_FACTOR)) {
-            System.out.println(monster.getName() + " dodged the attack by " + hero.getName());
+        if (Utility.rollDice() < (opponent.getDodgeChance() * MONSTER_DODGE_CHANCE_FACTOR)) {
+            System.out.println(opponent.getName() + " dodged the attack by " + hero.getName());
             return;
         }
 
@@ -89,7 +119,7 @@ public class BattleController implements GameController, ProductController{
             product.applySpellEffects(creature, opponent);
             product.consume(hero);
             System.out.println(
-                    hero.getName() + " attacked " + monster.getName()
+                    hero.getName() + " attacked with Spell " + product.getName() + " to " + opponent.getName()
                             + " and decreased " + product.affectedAttribute() + " by "
                             + product.getSpellDamage(product.getDamageValue(), hero.getDexterity()));
         } else {
@@ -99,6 +129,11 @@ public class BattleController implements GameController, ProductController{
         BattleOneRoundPublisher.getBattleOneRoundPublisherInstance().notifyObservers(creature, opponent, null);
     }
 
+    /**
+     * do equip of some products from the inventory
+     * Since this can be done by hero as of now we are casting creature
+     * @param creature Creature who want to perform equip
+     */
     public void doEquip(Creature creature) {
         Hero hero = (Hero) creature;
         Inventory inventory = hero.inventory();
@@ -129,6 +164,10 @@ public class BattleController implements GameController, ProductController{
         }
     }
 
+    /**
+     * Heal or use potion to heal some attributes
+     * @param creature creature who wants to heal
+     */
     public void heal(Creature creature) {
         Hero hero = (Hero) creature;
         Inventory inventory = hero.inventory();
@@ -151,6 +190,10 @@ public class BattleController implements GameController, ProductController{
         }
     }
 
+    /**
+     * Drop any product which was equipped
+     * @param creature creature who wants to perform this actions
+     */
     public void dropEquipable(Creature creature) {
         Hero hero = (Hero) creature;
         System.out.println();
@@ -186,22 +229,47 @@ public class BattleController implements GameController, ProductController{
         }
     }
 
-    public void attack(Creature creature, Creature opponent){
+    /**
+     * Attack with the strength, weapon
+     * @param attacker attacker creature
+     * @param opponent opponent creature
+     */
+    public void attack(Creature attacker, Creature opponent){
         double dodgeFactor = HERO_DODGE_CHANCE_FACTOR;
-        if (creature instanceof Monster){
+        if (attacker instanceof Monster){
             dodgeFactor = MONSTER_DODGE_CHANCE_FACTOR;
         }
 
         if (Utility.rollDice() < (opponent.getDodgeChance() * dodgeFactor)) {
-            System.out.println(creature.getName() + " dodged the attack by " + opponent.getName());
+            System.out.println();
+            System.out.println(attacker.getName() + " dodged the attack by " + opponent.getName());
         }
 
-        double damage = getActualAttackDamage(creature, opponent);
-        opponent.decreaseHealth(damage);
-        System.out.println(creature.getName() + " attacked " + opponent.getName() + " with damage of " + damage);
-        BattleOneRoundPublisher.getBattleOneRoundPublisherInstance().notifyObservers(creature, opponent, null);
+        double damage = getActualAttackDamage(attacker, opponent);
+        if (damage < 0) {
+            opponent.decreaseHealth(0);
+            System.out.println(attacker.getName() + " attacked " + opponent.getName());
+            System.out.println("Nice Job!, " + opponent.getName() + " defended " + attacker.getName() + " fully!");
+        } else {
+            opponent.decreaseHealth(damage);
+            System.out.println(attacker.getName() + " attacked " + opponent.getName() + " with damage of " + damage);
+        }
+
+        // if opponent is fainted!
+        if (!opponent.isAlive()) {
+            System.out.println();
+            System.out.println(opponent.getName() + " fainted by the attack of " + attacker.getName());
+        }
+        BattleOneRoundPublisher.getBattleOneRoundPublisherInstance().notifyObservers(attacker, opponent, null);
     }
 
+    /**
+     * Run the battle
+     * Since the controller is capable of managing all the operations
+     * and there would be only one chance for the creature so
+     * run won't make more sense.
+     * @throws IllegalAccessException throw if invalid operation
+     */
     @Override
     public void run() throws IllegalAccessException {
     }
