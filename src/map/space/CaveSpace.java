@@ -17,11 +17,13 @@ public class CaveSpace extends SpecialSpace{
 
     @Override
     protected void addBonus(Creature creature) {
-        creature.increaseAgility(BONUS_AGILITY);
+        bonusMap.put(creature, creature.getAgility());
+        creature.increaseAgility(creature.getAgility() * BONUS_AGILITY);
     }
 
     @Override
     protected void removeBonus(Creature creature) {
-        creature.decreaseAgility(BONUS_AGILITY);
+        creature.decreaseAgility(creature.getAgility() - bonusMap.get(creature));
+        bonusMap.remove(creature);
     }
 }

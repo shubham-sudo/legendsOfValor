@@ -32,6 +32,36 @@ public abstract class AbstractCreature implements Creature {
     }
 
     @Override
+    public double getHealth() {
+        return this.baseHealth;
+    }
+
+    @Override
+    public double getStrength() {
+        return strength;
+    }
+
+    @Override
+    public double getAgility() {
+        return agility;
+    }
+
+    @Override
+    public double getMana() {
+        return 0;
+    }
+
+    @Override
+    public double getExperience() {
+        return 0;
+    }
+
+    @Override
+    public double baseHealth(){
+        return this.baseHealth;
+    }
+
+    @Override
     public int getHomeLane(){
         return this.homeLane;
     }

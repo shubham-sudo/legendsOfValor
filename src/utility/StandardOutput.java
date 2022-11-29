@@ -2,6 +2,7 @@ package utility;
 
 import creature.Creature;
 import creature.CreatureAttributes;
+import creature.Hero;
 import product.*;
 
 import java.util.Arrays;
@@ -15,6 +16,24 @@ public class StandardOutput {
             "Price",
             "Product Code"
     };
+    private static final String[] heroHeader = new String[]{
+            "  Name",
+            "Level",
+            "Health",
+            "Mana",
+            "Strength",
+            "Agility",
+            "Dexterity",
+            "Experience",
+    };
+    private static final String[] monsterHeader = new String[]{
+            "  Name",
+            "Level",
+            "Health",
+            "Strength",
+            "Agility",
+    };
+
     private static final int columnLength = 22;
 
     public static void showArmorProducts(List<? extends Product> armors) {
@@ -123,8 +142,50 @@ public class StandardOutput {
         }
     }
 
-    public static void showCreature(Creature creature){
-        System.out.println();
-        System.out.println(creature);
+    public static void showCreature(Creature creature, boolean header, int index){
+        int newColumnLength = 15;
+        String[] details = null;
+        if (header) {
+            if (creature instanceof Hero) {
+                System.out.println();
+                System.out.println("\t\t######## Hero's ########");
+                System.out.println(Utility.getPaddedString(heroHeader, newColumnLength));
+                details = getStrings(creature);
+            } else {
+                System.out.println();
+                System.out.println("\t\t######## Monster's ########");
+                System.out.println(Utility.getPaddedString(monsterHeader, newColumnLength));
+                details = new String[monsterHeader.length];
+                details[2] = String.valueOf(creature.getHealth());
+                details[3] = String.valueOf(creature.getStrength());
+                details[4] = String.valueOf(creature.getAgility());
+            }
+        } else {
+            if (creature instanceof Hero) {
+                details = getStrings(creature);
+            } else {
+                details = new String[monsterHeader.length];
+                details[2] = String.valueOf(creature.getHealth());
+                details[3] = String.valueOf(creature.getStrength());
+                details[4] = String.valueOf(creature.getAgility());
+            }
+        }
+
+        details[0] = index + " " + creature.getName();
+        details[1] = String.valueOf(creature.getLevel());
+
+        System.out.println(Utility.getPaddedString(details, newColumnLength));
+    }
+
+    private static String[] getStrings(Creature creature) {
+        String[] details;
+        details = new String[heroHeader.length];
+        details[2] = creature.getHealth() + "/" + creature.baseHealth();
+        details[3] = String.valueOf(creature.getMana());
+        details[4] = String.valueOf(creature.getStrength());
+        details[5] = String.valueOf(creature.getAgility());
+        details[6] = String.valueOf(creature.getDexterity());
+        details[7] = creature.getExperience() + "/" + creature.getLevel() * 10;
+        return details;
     }
 }

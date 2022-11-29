@@ -17,11 +17,13 @@ public class KoulouSpace extends SpecialSpace{
 
     @Override
     protected void addBonus(Creature creature) {
-        creature.increaseStrength(BONUS_STRENGTH);
+        bonusMap.put(creature, creature.getStrength());
+        creature.increaseStrength(creature.getStrength() * BONUS_STRENGTH);
     }
 
     @Override
     protected void removeBonus(Creature creature) {
-        creature.decreaseStrength(BONUS_STRENGTH);
+        creature.decreaseStrength(creature.getStrength() - bonusMap.get(creature));
+        bonusMap.remove(creature);
     }
 }

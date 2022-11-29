@@ -25,7 +25,7 @@ public class MainController {
     private void gameMenu(){
         System.out.println("Hello, Welcome!!!");
         System.out.println("Which game you want to play today?");
-        System.out.println("[1] Legends");
+        System.out.println("[1] Legends Of Valor");
 
         while(true){
             int num;

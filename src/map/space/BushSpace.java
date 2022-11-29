@@ -17,11 +17,13 @@ public class BushSpace extends SpecialSpace{
 
     @Override
     protected void addBonus(Creature creature) {
-        creature.increaseDexterity(BONUS_DEXTERITY);
+        bonusMap.put(creature, creature.getDexterity());
+        creature.increaseDexterity(creature.getDexterity() * BONUS_DEXTERITY);
     }
 
     @Override
     protected void removeBonus(Creature creature) {
-        creature.decreaseDexterity(BONUS_DEXTERITY);
+        creature.decreaseDexterity(creature.getDexterity() - bonusMap.get(creature));
+        bonusMap.remove(creature);
     }
 }

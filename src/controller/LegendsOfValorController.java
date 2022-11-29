@@ -10,6 +10,7 @@ import map.space.Space;
 import move.GameMove;
 import move.Move;
 import player.Player;
+import utility.StandardOutput;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -151,7 +152,8 @@ public class LegendsOfValorController implements GameController {
         }
         System.out.print(" \t");
         System.out.println(String.join("", game.getMap().getLaneLabels()));
-        System.out.println("\nBoard colors represents the respective spaces");
+        System.out.println("\nEach lane (Lane-1, Lane-2, ..) column starts with 1 from left and increase one unit to left");
+        System.out.println("Board colors represents the respective spaces");
         for (String str : spaceRepresentations.keySet()){
             System.out.print(spaceRepresentations.get(str) + "   " + Space.ANSI_RESET);
             System.out.println("\t\t" + str);
@@ -162,14 +164,12 @@ public class LegendsOfValorController implements GameController {
     private void displayCreatures(ArrayList<? extends Creature> creatures){
         Iterator<? extends Creature> it = creatures.iterator();
         int i = 1;
+        boolean flag = true;
 
         while (it.hasNext()){
             Creature creature = it.next();
-            System.out.println(creature);
-//            if (i == 1){
-//                System.out.println("    "+ Utility.paddedString(Hero.header));
-//            }
-//            System.out.println("[" + i + "] " + Utility.paddedString(creature.seekInformation()));
+            StandardOutput.showCreature(creature, flag, i);
+            flag = false;
             i++;
         }
 
@@ -199,10 +199,10 @@ public class LegendsOfValorController implements GameController {
         System.out.println("Enter details to teleport Hero - " + creature.displayValue());
         System.out.println("Enter lane number to be teleported e.g. - 1");
         teleportPosition.laneNumber = getIntFromUser() - 1;
-        System.out.println("Enter row number to be teleported in Lane - " + teleportPosition.laneNumber);
+        System.out.println("Enter row [1 - N] number to be teleported in Lane - " + teleportPosition.laneNumber);
         teleportPosition.rowNumber = getIntFromUser() - 1;
-        System.out.println("Enter col number to be teleported in Lane - " + teleportPosition.laneNumber);
-        teleportPosition.colNumber = getIntFromUser();
+        System.out.println("Enter col [1 - N] number to be teleported in Lane - " + teleportPosition.laneNumber);
+        teleportPosition.colNumber = getIntFromUser() - 1;
         return teleportPosition;
     }
 
@@ -301,6 +301,8 @@ public class LegendsOfValorController implements GameController {
                         Move move = getMove(gameMove, creature);
                         if (game.isSafeMove(move)){
                             game.playMove(move);
+                            StandardOutput.showCreature(creature, true, 1);
+                            getEnter();
                             break;
                         }
                         humanReadableMessage(move);
@@ -326,11 +328,12 @@ public class LegendsOfValorController implements GameController {
     }
 
     private void overview(){
+        System.out.println();
         System.out.println(
-                "\t\t\t\tLegends of Valor isa MOBA (multiplayer online battle arena)-likegame. \n" +
+                "\t\t\t\tLegends of Valor isa MOBA (multiplayer online battle arena)-like game. \n" +
                 "\t\t\t\tThe player will control a team of 3 heroes who will attempt to fight their way \n" +
                 "\t\t\t\tthrough to the monsters’ Nexus.The heroes win if any of them reach the monsters’ Nexus. \n" +
-                "\t\t\t\tThe heroes loseif any monster reaches the heroes’ Nexus.\n"
+                "\t\t\t\tThe heroes lose if any monster reaches the heroes’ Nexus.\n"
         );
     }
 

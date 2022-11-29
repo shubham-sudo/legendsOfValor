@@ -170,7 +170,16 @@ public class LegendsOfValor extends Game{
     public void playMove(Move move){
         Creature opponent = map.getLane(move.laneNumber).getOpponentNearBy(move.creature);
         if (move.gameMove == GameMove.INFO) {
-            StandardOutput.showCreature(move.creature);
+            try {
+                Player player = players.stream().filter(player1 -> player1.getName().equals(MONSTER_TEAM_NAME)).findFirst().get();
+                boolean flag = true;
+                for (int i = 0; i < player.getCreatures().size(); i++) {
+                    StandardOutput.showCreature(player.getCreatures().get(i), flag, i+1);
+                    flag = false;
+                }
+            } catch (Exception e) {
+                // Passing since no monster found
+            }
         } else if (move.gameMove == GameMove.MARKET && map.isMarket(move)){
             openMarket(move.creature);
         } else if (move.gameMove == GameMove.ATTACK && opponent != null) {

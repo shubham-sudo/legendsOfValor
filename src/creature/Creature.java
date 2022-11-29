@@ -9,6 +9,18 @@ import map.Position;
 public interface Creature {
     int getHomeLane();
 
+    double getHealth();
+
+    double baseHealth();
+
+    double getMana();
+
+    double getStrength();
+
+    double getAgility();
+
+    double getExperience();
+
     String getName();
 
     void setHomeLane(int laneNumber);

@@ -46,10 +46,18 @@ public abstract class Hero extends AbstractCreature {
         this.inHandWeapons = new ArrayList<>();
     }
 
+    @Override
+    public double getExperience() {
+        return experience;
+    }
+
     public ArrayList<Weapon> getInHandWeapons() {
         return inHandWeapons;
     }
 
+    public double getHealth() {
+        return this.health;
+    }
 
     @Override
     public double getDamage() {

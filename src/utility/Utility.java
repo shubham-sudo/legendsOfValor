@@ -16,8 +16,9 @@ public class Utility {
         StringBuilder newData = new StringBuilder();
         for (String d : data){
             if (d != null) {
-                if (d.length() > paddingLength){
+                if (d.length() >= paddingLength){
                     newData.append(d, 0, paddingLength-1);
+                    newData.append(" ");
                 }else {
                     newData.append(d).append(new String(new char[paddingLength - d.length()]).replace("\0", " "));
                 }

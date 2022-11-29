@@ -4,6 +4,9 @@ import creature.Creature;
 import creature.Hero;
 import creature.Monster;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
 /**
  * Base class for all type of special spaces
  * @see BushSpace
@@ -13,6 +16,11 @@ import creature.Monster;
 public abstract class SpecialSpace implements Space {
     protected Creature hero = null;
     protected Creature monster = null;
+    protected HashMap<Creature, Double> bonusMap;
+
+    public SpecialSpace(){
+        bonusMap = new HashMap<>();
+    }
 
     private boolean isSafeForMonster(Creature creature){
         if (!(creature instanceof Monster)){
