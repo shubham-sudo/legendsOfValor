@@ -145,13 +145,14 @@ public class LegendsOfValor extends Game{
         } else if (move.gameMove == GameMove.INFO) {
             return true;
         } else if (move.gameMove == GameMove.ATTACK) {
-            return map.getLane(move.laneNumber).getOpponentNearBy(move.creature) != null;
+            return map.getLane(move.laneNumber).getOpponentNearBy(move.creature) != null && move.creature.isAlive();
         } else if (move.gameMove == GameMove.EQUIP || move.gameMove == GameMove.POTION
                 || move.gameMove == GameMove.CAST  || move.gameMove == GameMove.DROP) {
             Inventory inventory = ((Hero) move.creature).inventory();
             switch (move.gameMove) {
                 case CAST:
-                    return inventory.hasCastable() && map.getLane(move.laneNumber).isOpponentNearBy(move.creature);
+                    return inventory.hasCastable() && map.getLane(move.laneNumber).isOpponentNearBy(move.creature)
+                            && move.creature.isAlive() && battleController.canCast(move.creature);
                 case POTION:
                     return inventory.hasHealer();
                 case EQUIP:

@@ -11,6 +11,8 @@ import inventory.Inventory;
 import product.*;
 import utility.Utility;
 
+import java.util.Iterator;
+
 
 public class BattleController implements GameController, ProductController{
     private static BattleController battleController;
@@ -27,6 +29,21 @@ public class BattleController implements GameController, ProductController{
             battleController = new BattleController();
         }
         return battleController;
+    }
+
+    public boolean canCast(Creature creature) {
+        Hero hero = (Hero) creature;
+        Iterator<Product> it = hero.inventory().productsIterator();
+        while (it.hasNext()){
+            Product spell = it.next();
+            if (spell instanceof Spell) {
+                if (((Spell) spell).getRequiredMana() >= creature.getMana()) {
+                    return true;
+                }
+            }
+        }
+        System.out.println("Creature " + creature.getName() + " don't have enough mana to CAST any spell");
+        return false;
     }
 
     private double getActualAttackDamage(Creature attacker, Creature opponent){

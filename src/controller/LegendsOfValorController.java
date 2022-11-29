@@ -268,11 +268,19 @@ public class LegendsOfValorController implements GameController {
                 System.out.println("Cannot move UP/DOWN when another creature near by!");
                 break;
             case ATTACK:
-                System.out.println("Opponent is far away, Save you moves!");
+                if (move.creature != null && !move.creature.isAlive()) {
+                    System.out.println("Fainted heroes can't attack or cast");
+                } else {
+                    System.out.println("Opponent is far away, Save you moves!");
+                }
                 break;
             case CAST:
-                System.out.println("You don't have any castable in your inventory OR");
-                System.out.println("Opponent is far away, Save your products!");
+                if (move.creature != null && !move.creature.isAlive()) {
+                    System.out.println("Fainted heroes can't attack or cast");
+                } else {
+                    System.out.println("You don't have any castable in your inventory OR");
+                    System.out.println("Opponent is far away, Save your products!");
+                }
                 break;
             case EQUIP:
                 System.out.println("You don't have any equipable product in your inventory");
@@ -345,6 +353,14 @@ public class LegendsOfValorController implements GameController {
         if (!exit){
             System.out.println("\n######## Congratulations!!!, " + playerTurn.getName() + " Won this Game ########");
         }
+
+
+
+
+        // TODO (shubham) -- FIX THE ATTACK DAMAGE and FAINTED HERO SHOULD NOT BE ABLE TO ATTACK
+
+
+
     }
 
     private void overview(){
