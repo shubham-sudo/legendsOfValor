@@ -102,8 +102,8 @@ public class BattleController implements GameController, ProductController{
     public void cast(Creature creature, Creature opponent){
         Hero hero = (Hero) creature;
 
-        if (Utility.rollDice() < (opponent.getDodgeChance() * MONSTER_DODGE_CHANCE_FACTOR)) {
-            System.out.println(opponent.getName() + " dodged the attack by " + hero.getName());
+        if (Utility.rollDice() < (opponent.getDodgeChance() * MONSTER_DODGE_CHANCE_FACTOR) * 100) {
+            System.out.println(opponent.getName() + " dodged the spell attack by " + hero.getName());
             return;
         }
 
@@ -240,9 +240,10 @@ public class BattleController implements GameController, ProductController{
             dodgeFactor = MONSTER_DODGE_CHANCE_FACTOR;
         }
 
-        if (Utility.rollDice() < (opponent.getDodgeChance() * dodgeFactor)) {
+        if (Utility.rollDice() < (opponent.getDodgeChance() * dodgeFactor) * 100) {
             System.out.println();
             System.out.println(attacker.getName() + " dodged the attack by " + opponent.getName());
+            return;
         }
 
         double damage = getActualAttackDamage(attacker, opponent);
