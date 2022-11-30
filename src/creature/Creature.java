@@ -103,7 +103,7 @@ public interface Creature {
      * setter for id
      * @param id integer id
      */
-    void setId(int id);   // TODO (shubham) this is temporary function .. fix the createCreature before remove
+    void setId(int id);
 
     /**
      * Decrease agility

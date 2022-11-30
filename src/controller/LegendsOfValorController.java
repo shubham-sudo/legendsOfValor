@@ -57,19 +57,19 @@ public class LegendsOfValorController implements GameController {
                 switch (num){
                     case 1:
                         displayCreatures(this.creaturesFactory.getPaladins());
-                        creature = getCreature(this.creaturesFactory.getPaladins()); // TODO: (shubham) remove this once factory is fixed
+                        creature = getCreature(this.creaturesFactory.getPaladins());
                         creature.setId(i+1);
                         player.addCreature(creature);
                         break;
                     case 2:
                         displayCreatures(this.creaturesFactory.getSorcerers());
-                        creature = getCreature(this.creaturesFactory.getSorcerers()); // TODO: (shubham) remove this once factory is fixed
+                        creature = getCreature(this.creaturesFactory.getSorcerers());
                         creature.setId(i+1);
                         player.addCreature(creature);
                         break;
                     case 3:
                         displayCreatures(this.creaturesFactory.getWarriors());
-                        creature = getCreature(this.creaturesFactory.getWarriors()); // TODO: (shubham) remove this once factory is fixed
+                        creature = getCreature(this.creaturesFactory.getWarriors());
                         creature.setId(i+1);
                         player.addCreature(creature);
                         break;
@@ -143,7 +143,7 @@ public class LegendsOfValorController implements GameController {
 
                 Lane lane = lanes[j];
                 for (int k = 0; k < lane.getWidth(); k++){
-                    Space space = lane.getSpace(i, k);  // TODO: (shubham) think if we can have border for every space
+                    Space space = lane.getSpace(i, k);
                     if (!spaceRepresentations.containsKey(space.getClass().getSimpleName())){
                         spaceRepresentations.put(space.getClass().getSimpleName(), space.bgColor());
                     }
@@ -252,7 +252,6 @@ public class LegendsOfValorController implements GameController {
                 move.laneNumber = creature.getHomeLane();
                 move.rowNumber = game.getMap().getLaneSize()-1;
                 move.colNumber = 1;
-                // TODO (shubham): hard coded for time being, This will always goes to second col of lane
                 break;
             case TELEPORT:
                 // Ask user for the lane number, row and column

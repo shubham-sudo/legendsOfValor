@@ -7,8 +7,8 @@ import creature.Creature;
  * Cave space where the agility of creatures increases
  */
 public class CaveSpace extends SpecialSpace{
-    private final double BONUS_AGILITY = 0.10;  // TODO: fetch this strength from config files
-    private static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";  // TODO: fetch this from config files
+    private final double BONUS_AGILITY = 0.10;
+    private static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
 
     /**
      * Return the background color for this particular space

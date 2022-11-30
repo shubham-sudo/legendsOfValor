@@ -7,7 +7,7 @@ import creature.Creature;
  * Inaccessible space which is used for walls between lanes
  */
 public class InaccessibleSpace extends NormalSpace{
-    private static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";  // TODO: fetch this from config files
+    private static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";
 
     /**
      * Is safe to occupy this space by any creature

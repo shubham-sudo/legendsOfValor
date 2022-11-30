@@ -31,7 +31,7 @@ import java.util.stream.Stream;
  */
 public class LegendsOfValor extends Game{
     private static LegendsOfValor legendsOfValor;
-    private static final MapFactory mapFactory = new MapFactory();  // TODO: (Shubham) have to use map factory for maps
+    private static final MapFactory mapFactory = new MapFactory();
     private static final CreaturesFactory creaturesFactory = new CreaturesFactory();
     private static final MarketController marketController = new MarketController();
     private static final BattleController battleController = BattleController.getBattleControllerInstance();

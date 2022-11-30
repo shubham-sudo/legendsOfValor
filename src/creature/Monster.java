@@ -25,7 +25,7 @@ public class Monster extends AbstractCreature {
      * @param id id to set (the display value)
      */
     @Override
-    public void setId(int id) {  // TODO: (shubham) remove this once createCreature factory is fixed
+    public void setId(int id) {
     }
 
     /**
