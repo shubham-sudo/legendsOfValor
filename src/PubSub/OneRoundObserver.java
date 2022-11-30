@@ -10,9 +10,9 @@ import map.space.Space;
 
 
 /**
- * Battle one round effects observer
+ * One round effects observer
  */
-public class BattleOneRoundObserver implements GameObserver{
+public class OneRoundObserver implements GameObserver{
 
     /**
      * clean the space and revive hero if fainted
@@ -21,23 +21,23 @@ public class BattleOneRoundObserver implements GameObserver{
      * @param game game
      */
     private void spaceCleanWithRevive(Creature attacker, Creature opponent, LegendsOfValor game){
-        if (!attacker.isAlive()) {
-            Position position = attacker.getCurrentPosition();
-            game.getMap().getLane(position.laneNumber).vacantSpace(attacker, position.rowNumber, position.colNumber);
-            if (attacker instanceof Hero) {
-                ((Hero) attacker).revive();
-                int homeLane = attacker.getHomeLane();
+        if (!opponent.isAlive()) {
+            Position position = opponent.getCurrentPosition();
+            game.getMap().getLane(position.laneNumber).vacantSpace(opponent, position.rowNumber, position.colNumber);
+            if (opponent instanceof Hero) {
+                ((Hero) opponent).revive();
+                int homeLane = opponent.getHomeLane();
                 Lane lane = game.getMap().getLane(homeLane);
-                for (int i = 0; i < lane.getWidth(); i++){
+                for (int i = lane.getLength()-1; i > -1; i--){
                     try {
-                        lane.occupySpace(attacker, lane.getLength()-1, i);
+                        lane.occupySpace(opponent, lane.getLength()-1, i);
                         break;
                     } catch (IllegalAccessException ie) {
                         // ie.printStackTrace();
                     }
                 }
-            } else if (attacker instanceof Monster && opponent instanceof Hero) {
-                Hero hero = (Hero) opponent;
+            } else if (opponent instanceof Monster && attacker instanceof Hero) {
+                Hero hero = (Hero) attacker;
                 hero.gainExperience(2);
                 hero.gainGold(attacker.getLevel() * 100);
                 game.increaseRound();
@@ -58,7 +58,7 @@ public class BattleOneRoundObserver implements GameObserver{
      */
     private void applyOneRoundEffects(Creature creature, Creature opponent, Space space){
         LegendsOfValor game = LegendsOfValor.getGameInstance();
-        spaceCleanWithRevive(opponent, creature, game);
+        spaceCleanWithRevive(creature, opponent, game);
     }
 
     /**
@@ -84,7 +84,9 @@ public class BattleOneRoundObserver implements GameObserver{
      */
     @Override
     public void notifying(Creature creature, Creature opponent, Space space) {
-        applyOneRoundEffects(creature, opponent, space);
+        if (creature != null && opponent != null){
+            applyOneRoundEffects(creature, opponent, space);
+        }
         checkForNewMonsterSpawn();
     }
 }

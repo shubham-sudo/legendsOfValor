@@ -1,5 +1,6 @@
 package game;
 
+import PubSub.OneRoundPublisher;
 import PubSub.GameWinObserver;
 import PubSub.GameWinPublisher;
 import controller.BattleController;
@@ -307,5 +308,6 @@ public class LegendsOfValor extends Game{
             faintedCreatures.add(opponent);
         }
         maxLevel = Math.max(maxLevel, move.creature.getLevel());
+        OneRoundPublisher.getOneRoundPublisherInstance().notifyObservers(null, null, null);
     }
 }

@@ -1,7 +1,7 @@
 package controller;
 
-import PubSub.BattleOneRoundObserver;
-import PubSub.BattleOneRoundPublisher;
+import PubSub.OneRoundObserver;
+import PubSub.OneRoundPublisher;
 import creature.Creature;
 import creature.CreatureAttributes;
 import creature.Hero;
@@ -28,7 +28,7 @@ public class BattleController implements GameController, ProductController{
      * Constructor from the Battle Controller
      */
     private BattleController(){
-        BattleOneRoundPublisher.getBattleOneRoundPublisherInstance().register(new BattleOneRoundObserver());
+        OneRoundPublisher.getOneRoundPublisherInstance().register(new OneRoundObserver());
     }
 
     /**
@@ -126,7 +126,7 @@ public class BattleController implements GameController, ProductController{
             System.out.println("Can't cast " + product.getName() + "!");
             System.out.println("Required Mana is " + product.getRequiredMana());
         }
-        BattleOneRoundPublisher.getBattleOneRoundPublisherInstance().notifyObservers(creature, opponent, null);
+        OneRoundPublisher.getOneRoundPublisherInstance().notifyObservers(creature, opponent, null);
     }
 
     /**
@@ -260,7 +260,7 @@ public class BattleController implements GameController, ProductController{
             System.out.println();
             System.out.println(opponent.getName() + " fainted by the attack of " + attacker.getName());
         }
-        BattleOneRoundPublisher.getBattleOneRoundPublisherInstance().notifyObservers(attacker, opponent, null);
+        OneRoundPublisher.getOneRoundPublisherInstance().notifyObservers(attacker, opponent, null);
     }
 
     /**

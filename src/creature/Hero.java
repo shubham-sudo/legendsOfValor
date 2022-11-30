@@ -158,6 +158,10 @@ public abstract class Hero extends AbstractCreature {
     @Override
     public void decreaseHealth(double health) {
         this.health = Math.max((this.health - health), 0);
+        if (this.health <= 0) {
+            this.health = 0;
+            this.setDead();
+        }
     }
 
     /**

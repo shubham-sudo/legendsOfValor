@@ -9,14 +9,14 @@ import java.util.ArrayList;
 /**
  * Publisher for one round of the battle
  */
-public class BattleOneRoundPublisher implements GamePublisher{
+public class OneRoundPublisher implements GamePublisher{
     private final ArrayList<GameObserver> gameObservers;
     private static GamePublisher gamePublisher;
 
     /**
      * Constructor for battle one round publisher
      */
-    private BattleOneRoundPublisher(){
+    private OneRoundPublisher(){
         this.gameObservers = new ArrayList<>();
     }
 
@@ -24,9 +24,9 @@ public class BattleOneRoundPublisher implements GamePublisher{
      * get instance of the battle one round publisher
      * @return BattleOneRoundPublisher object
      */
-    public static GamePublisher getBattleOneRoundPublisherInstance() {
+    public static GamePublisher getOneRoundPublisherInstance() {
         if (gamePublisher == null) {
-            gamePublisher = new BattleOneRoundPublisher();
+            gamePublisher = new OneRoundPublisher();
         }
         return gamePublisher;
     }
