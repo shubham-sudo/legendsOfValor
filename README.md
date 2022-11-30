@@ -2,11 +2,11 @@
 Legends of Valor isa MOBA (multiplayer online battle arena)-like game. The player will control a team of 3 heroes who will attempt to fight their way through to the monsters’ Nexus.The heroes win if any of them reach the monsters’ Nexus. The heroes lose if any monster reaches the heroes’ Nexus.
 
 # Map View
-![map.png](map.png)
+![map.png](img/map.png)
 
-![move.png](move.png)
+![move.png](img/move.png)
 
-![teleport.png](teleport.png)
+![teleport.png](img/teleport.png)
 
 ## DEMO PLAY
 <pre>
@@ -143,7 +143,7 @@ Heroes are all-set to move on map!
 Hit Enter ...
 </pre>
 
-![img.png](img.png)
+![img.png](img/img.png)
 <pre>
 
 1	   M1             M2             M3             M4             M5             M6     
@@ -179,7 +179,7 @@ Name         Level          Health         Mana           Strength       Agility
 Hit Enter ...
 </pre>
 
-![img_1.png](img_1.png)
+![img_1.png](img/img_1.png)
 <pre>
 1	   M1             M2             M3             M4             M5             M6     
 2	                                                                                     
@@ -212,7 +212,7 @@ Name         Level          Health         Mana           Strength       Agility
 Hit Enter ...
 </pre>
 
-![img_2.png](img_2.png)
+![img_2.png](img/img_2.png)
 <pre>
 1	   M1             M2             M3             M4             M5             M6     
 2	                                                                                     
@@ -245,7 +245,7 @@ Name         Level          Health         Mana           Strength       Agility
 Hit Enter ...
 </pre>
 
-![img_3.png](img_3.png)
+![img_3.png](img/img_3.png)
 <pre>
 1	   M1             M2             M3             M4             M5             M6     
 2	                                                                                     
@@ -278,7 +278,7 @@ Name         Level          Health         Mana           Strength       Agility
 Hit Enter ...
 </pre>
 
-![img_4.png](img_4.png)
+![img_4.png](img/img_4.png)
 <pre>
 1	   M1             M2             M3             M4             M5             M6     
 2	                                                                                     
@@ -311,7 +311,7 @@ Name         Level          Health         Mana           Strength       Agility
 Hit Enter ...
 </pre>
 
-![img_5.png](img_5.png)
+![img_5.png](img/img_5.png)
 <pre>
 1	   M1             M2             M3             M4             M5             M6     
 2	                                                                                     
@@ -344,7 +344,7 @@ Name         Level          Health         Mana           Strength       Agility
 Hit Enter ...
 </pre>
 
-![img_6.png](img_6.png)
+![img_6.png](img/img_6.png)
 <pre>
 1	   M1             M2             M3             M4             M5             M6     
 2	                                                                                     
@@ -562,7 +562,7 @@ Name         Level          Health         Mana           Strength       Agility
 Hit Enter ...
 </pre>
 
-![img_7.png](img_7.png)
+![img_7.png](img/img_7.png)
 <pre>
 1	                                                                                     
 2	   M1             M2             M3             M4             M5             M6     
@@ -1202,7 +1202,7 @@ Name         Level          Health         Mana           Strength       Agility
 Hit Enter ...
 </pre>
 
-![img_8.png](img_8.png)
+![img_8.png](img/img_8.png)
 <pre>
 1	                                                                                     
 2	                                                                                     
@@ -1390,7 +1390,7 @@ Monster M3 playing his move
 Hit Enter ...
 </pre>
 
-![img_9.png](img_9.png)
+![img_9.png](img/img_9.png)
 <pre>
 1	                                                                                     
 2	                                                                                     
@@ -1938,7 +1938,7 @@ Natsunomeryu attacked Amaryllis_Astra with damage of 60.0
 Hit Enter ...
 </pre>
 
-![img_10.png](img_10.png)
+![img_10.png](img/img_10.png)
 <pre>
 1	   M7             M8             M9             M10             M11             M12     
 2	                                                                                     
@@ -2362,7 +2362,7 @@ Name         Level          Health         Mana           Strength       Agility
 Hit Enter ...
 </pre>
 
-![img_11.png](img_11.png)
+![img_11.png](img/img_11.png)
 <pre>
 1	                                                                                     
 2	     H1           M8H2           M9             M10             M11             M12H6   
@@ -2716,7 +2716,7 @@ Name         Level          Health         Mana           Strength       Agility
 Hit Enter ...
 </pre>
 
-![img_12.png](img_12.png)
+![img_12.png](img/img_12.png)
 <pre>
 1	     H1                                                                              
 2	                  M8H2                                                        M12H6   
