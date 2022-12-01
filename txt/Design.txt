@@ -1,0 +1,28 @@
+We choose to work on Shubham's code from last game. Siyi's comments and question were quite innovative from
+the last game to hold the player for long time. We picked few comments from last game and added on top of it.
+We choose Siyi's design of market part, advantages are as follows:
+1. It has several products' information ready to use
+2. It has the function of create new market, get names and add new products.
+3. It can serve as a single block and easy to add
+In this project Siyi continued to work on it, making it adapt to the new map and more feature-rich.
+
+The choice of Shubham's general design is because
+1. It has all the products, creatures, controller, market and other packages are fully aligned and were ready to use.
+2. It has independent battle and market classes to decouple these functionality from main game class & we just needed to
+   call the respective factories.
+3. The use of controller is such a nice approach that other rest of the modules works as an API's. We have added few
+   more controllers & and GameInputManager (Game input manager manage & validate all input's from the users).
+
+Overall design principle
+We used package approach for most of the game parts to do the decoupling and write API's for every module to do the interactions
+These package/component include BoardMap(Lane, Space), Creature, Market, Inventory and Game, Product.
+The whole game starts with the main class and everything under that is controlled by the controllers. The map of this game
+is redesigned as per the requirement, the product, creature & inventory packages & classes are use as it is with a little
+tweaks where ever required.
+
+Why this design is correct - because it decouples user interaction and underneath functionalities.
+When we started modifications in Legends of Heroes and Monsters to Legends of Valor, the decoupling of packages allowed
+us to do minimum modifications and helped us to divide the work.
+1. Since the game was segregated into different parts we just picked one by one all the parts and started making modifications.
+2. We added the battle controller to remove the battle part from main legends game controller.
+3. The original market and inventory components also doesn't undergo any large change.
