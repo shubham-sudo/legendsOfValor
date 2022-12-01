@@ -112,11 +112,11 @@ when you open in some IDE which supports README.md view. We encourage you to che
 
 ## How to compile and run
 ---------------------------------------------------------------------------
-1. Navigate to the directory "legends" after unzipping the files
-2. Run the following instructions:
-   mkdir bin
-   javac -d bin @sources.txt
-   java -cp bin Main
+1. Navigate to the directory "legendsOfValor" after unzipping the files
+2. Navigate to the directory "src" after unzipping the files
+3. Run the following instructions:
+   javac Main.java
+   java Main
 
 ## Input/Output Example
 ---------------------------------------------------------------------------

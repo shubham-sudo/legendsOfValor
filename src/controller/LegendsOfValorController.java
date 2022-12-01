@@ -190,7 +190,7 @@ public class LegendsOfValorController implements GameController {
     private GameMove getGameMove(Creature creature){
         System.out.println();
         System.out.println("Possible Moves [u]UP, [d]DOWN, [r]RIGHT, [l]LEFT, [m]MARKET, [q]EXIT, \n[a]ATTACK, [c]CAST, [p]POTION, [e]EQUIP, [i]INFO, [b]RECALL, [t]TELEPORT");
-        System.out.println("You may use [i]INFO to show info of Monsters and pass your move");
+        System.out.println("\nYou may use [i]INFO to show info of Monsters and pass your move");
         System.out.println("Enter move for " + creature.displayValue());
         GameMove move;
 
